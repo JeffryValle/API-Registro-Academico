@@ -5,7 +5,7 @@ create table usuarios (
     telefono varchar(12) not null,
     rol varchar(150) not null,
     password_hash varchar(255) not null,
-    cambio_password boolean not null default false,
+    cambio_password boolean not null default true,
     fecha_creado timestamp default current_timestamp
 );
 
