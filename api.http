@@ -1,2 +1,10 @@
 ### Obtener matriculas
 GET http://localhost:3000/matriculas
+
+
+### Ver estudiantes que pertenecen a un curso
+GET http://localhost:3000/matriculas/curso/gfgd8erdh5asdf
+
+
+### Ver cursos en los que esta inscrito un estudiante
+GET http://localhost:3000/matriculas/usuario/20212000761
