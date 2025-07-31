@@ -25,19 +25,7 @@ create table matriculas (
     foreign key (curso_id) references cursos(curso_id)
 );
 
-use registro_academico;
 
-select * from cursos;
-select * from usuarios;
-select * from matriculas;
-insert into usuarios (cuenta_id, nombre, correo, telefono, rol, password_hash)
-values( "20212000761", "Jeffry Espinal Valle", "jeffryvalle99@gmail.com", "99998888", "admin", "123213" );
-
-insert into cursos (curso_id, nombre, cupos)
-values ("gfgd8erdh5asdf","Ingenieria de Software", 30);
-
-insert into matriculas (matricula_id, usuario_id, curso_id)
-values ("ksjdaksdja123","20212000761", "gfgd8erdh5asdf");
 
 
 

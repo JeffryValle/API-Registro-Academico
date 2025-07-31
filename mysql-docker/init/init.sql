@@ -10,7 +10,7 @@ create table usuarios (
 );
 
 create table cursos (
-	curso_id char(36) auto_increment primary key not null,
+	curso_id char(36) primary key not null,
     nombre varchar(255) unique not null,
     cupos int not null
 );
