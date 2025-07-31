@@ -2,7 +2,8 @@ import { Router } from "express";
 import { 
     getAllMatriculas, 
     getStudentsByCurso, 
-    getCursoByStudent 
+    getCursoByStudent, 
+    crearMatricula
 } from "../controllers/matricula.controller.js";
 
 const matriculaRouter = Router();
@@ -15,6 +16,7 @@ const matriculaRouter = Router();
 matriculaRouter.get('/', getAllMatriculas);
 matriculaRouter.get('/curso/:id', getStudentsByCurso);
 matriculaRouter.get('/usuario/:id', getCursoByStudent);
+matriculaRouter.post('/', crearMatricula );
 
 
 export default matriculaRouter;

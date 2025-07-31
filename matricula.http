@@ -1,0 +1,21 @@
+### Obtener matriculas
+GET http://localhost:3000/matriculas
+
+
+### Ver estudiantes que pertenecen a un curso
+# GET http://localhost:3000/matriculas/curso/gfgd8erdh5asdf
+# GET http://localhost:3000/matriculas/curso/a1b2c3d4-e5f6-7890-1234-abcdef123456
+GET http://localhost:3000/matriculas/curso/e5f6a7b8-c9d0-1234-5678-ef5678901234
+
+
+### Ver cursos en los que esta inscrito un estudiante
+GET http://localhost:3000/matriculas/usuario/20210000005
+
+### Crear matricula
+POST http://localhost:3000/matriculas
+Content-Type: application/json
+
+{
+    "usuario": "20212000761",
+    "curso": "Base de datos"
+}
