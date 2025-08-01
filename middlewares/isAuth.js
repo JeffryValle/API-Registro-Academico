@@ -17,20 +17,30 @@ export const isAuth = (req, res, next) => {
 
     try {
 
-        const { cuenta_id, password, rol } = jwt.verify(token, process.env.SECRET_JWT_SEED)
+        const payload = jwt.verify( token, process.env.SECRET_JWT_SEED );
 
-        console.log( cuenta_id, password, rol );
-
-        if ( !cuenta_id || !password || !rol ) {
+        // Verificar el tiempo de expiración del token
+        // Date.now() devuelve en milisegundos
+        // payload.exp devuelve en segundos
+        if ( Date.now() >= payload.exp * 1000 ) {
             res.status(401).json({
-                result: false,
-                message: 'Token inválido o incompleto',
+                success: false,
+                message: 'Su token ha expirado. Por favor, inicie sesión nuevamente.',
             })
             return
         }
 
+        const { cuenta_id, correo, password, rol } = payload;
+
+        if ( !cuenta_id || !correo || !password || !rol ) {
+            res.status(401).json({
+                result: false,
+                message: 'Este token no es válido',
+            })
+            return
+        };
+
         req.cuenta_id = cuenta_id
-        req.password = password
         req.rol = rol
 
         next();
