@@ -8,8 +8,8 @@ export const isAdmin = async (req, res, next) => {
     try {
         
         const esAdmin = await verifyAdmin( cuenta_id ); 
-
-        if ( esAdmin["rol"] !== rol ) {
+        
+        if ( esAdmin["Rol"] !== rol ) {
             res.status(401).json({
                 success: false,
                 message: 'Acceso denegado. Se requiere rol de administrador.',

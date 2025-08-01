@@ -2,7 +2,11 @@ import pool from '../config/database.js';
 
 export const verifyAdmin = async ( id ) => {
 
-    const query = 'SELECT rol FROM usuarios WHERE cuenta_id = ?';
+    const query = `SELECT 
+                        r.nombre AS Rol 
+                    FROM usuarios AS u
+                    INNER JOIN roles AS r ON r.rol_id = u.rol_id
+                    WHERE u.cuenta_id = ? ;`;
 
     const [ rows ] = await pool.query( query, [ id ] );
 
@@ -22,7 +26,7 @@ export const getMatriculas = async () => {
                 INNER JOIN cursos AS c ON c.curso_id = m.curso_id;`;
 
     const [ results ] = await pool.query( query );
-
+    
     return results;
 }
 

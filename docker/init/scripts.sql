@@ -1,5 +1,19 @@
 use registro_academico;
 
+select * from calificaciones;
+select * from cursos;
+select * from matriculas;
+select * from periodo_academico;
+select * from roles;
+select * from sub_periodo;
+select * from usuarios;
+
+SELECT 
+	r.nombre AS Rol 
+FROM usuarios AS u
+INNER JOIN roles AS r ON r.rol_id = u.rol_id
+WHERE u.cuenta_id = '20212000001';
+
 SELECT 
 	m.matricula_id AS Matricula,
 	u.nombre AS Nombre,
@@ -19,7 +33,7 @@ SELECT
 FROM matriculas AS m
 INNER JOIN usuarios AS u ON u.cuenta_id = m.usuario_id
 INNER JOIN cursos AS c ON c.curso_id = m.curso_id
-WHERE c.curso_id = 'gfgd8erdh5asdf';
+WHERE c.curso_id = '550e8400-e29b-41d4-a716-446655440001';
 
 SELECT
 	u.cuenta_id AS Cuenta,
@@ -31,10 +45,7 @@ SELECT
 FROM matriculas AS m
 INNER JOIN usuarios AS u ON u.cuenta_id = m.usuario_id
 INNER JOIN cursos AS c ON c.curso_id = m.curso_id
-WHERE u.cuenta_id = '20212000761';
-
-SELECT * FROM matriculas;
-SELECT * FROM cursos;
+WHERE u.cuenta_id = '20212000004';
 
 SELECT 
 	m.matricula_id AS Matricula,
@@ -43,11 +54,14 @@ SELECT
     m.fecha_creado AS FechaInscripcion
 FROM matriculas AS m
 INNER JOIN cursos AS c on c.curso_id = m.curso_id
-WHERE m.usuario_id = '20210000001' AND c.nombre = 'Inteligencia Artificial';
+WHERE m.usuario_id = '20212000004' AND c.nombre = 'Historia Universal';
+
+select * from cursos;
+select * from usuarios;
 
 SELECT *
 FROM matriculas
-WHERE usuario_id = '20210000001';
+WHERE usuario_id = '20212000003';
 
 SELECT 
     c.curso_id AS CodigoCurso,
@@ -57,11 +71,7 @@ SELECT
     (c.cupos - COUNT(m.usuario_id)) AS Disponibles
 FROM cursos c
 LEFT JOIN matriculas m ON m.curso_id = c.curso_id
-WHERE c.nombre = "Inteligencia Artificial"
+WHERE c.nombre = "Historia Universal"
 GROUP BY c.curso_id, c.nombre, c.cupos;
 
-INSERT INTO matriculas ( matricula_id, usuario_id, curso_id)
-VALUES ('UUID-MATRICULA-001','USUARIO123',
-    (SELECT curso_id FROM cursos WHERE nombre = 'Matemáticas I')
-);
 
