@@ -1,6 +1,6 @@
 -- Crear base de datos
-CREATE DATABASE IF NOT EXISTS registroAcademico;
-USE registroAcademico;
+CREATE DATABASE IF NOT EXISTS registro_academico;
+USE registro_academico;
 
 -- Tabla: Roles
 CREATE TABLE roles (
@@ -33,24 +33,33 @@ CREATE TABLE periodo_academico (
     nombre VARCHAR(15) NOT NULL
 );
 
-create table matriculas (
+CREATE TABLE sub_periodo (
+    subperiodo_id INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(15) NOT NULL
+);
+
+CREATE TABLE matriculas (
 	matricula_id char(36) primary key not null,
-    usuario_id varchar(12) not null,
+    cuenta_id varchar(12) not null,
     curso_id char(36) not null,
     periodo_id INT NOT NULL,
-    resultado varchar(12) not null, --para saber si esta fue aprobada o reprobada
+    resultado varchar(12) null, -- para saber si esta fue aprobada o reprobada
     fecha_creado timestamp default current_timestamp,
     fecha_final datetime,
-    UNIQUE (usuario_id, curso_id, periodo_id),
-    foreign key (usuario_id) references usuarios(cuenta_id),
-    foreign key (curso_id) references cursos(curso_id)
+    UNIQUE (cuenta_id, curso_id, periodo_id),
+    FOREIGN KEY (cuenta_id) REFERENCES usuarios(cuenta_id),
+    FOREIGN KEY (curso_id) REFERENCES cursos(curso_id),
     FOREIGN KEY (periodo_id) REFERENCES periodo_academico(periodo_id)
 );
 
 CREATE TABLE calificaciones (
     calificacion_id INT PRIMARY KEY AUTO_INCREMENT,
-    matricula_id char(36) NOT NULL UNIQUE,
+    matricula_id char(36) NOT NULL,
     nota DECIMAL(5,2) NOT NULL,
     fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (matricula_id) REFERENCES matriculas(matricula_id)
+    subperiodo_id int not null,
+    UNIQUE (matricula_id, subperiodo_id),
+    FOREIGN KEY ( subperiodo_id ) REFERENCES sub_periodo( subperiodo_id ),
+    FOREIGN KEY ( matricula_id ) REFERENCES matriculas( matricula_id )
 );
+
