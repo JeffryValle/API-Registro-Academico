@@ -5,12 +5,10 @@ export const isAuth = (req, res, next) => {
 
     const { authorization } = req.headers
 
-    console.log('Authorization', authorization);
-
     if ( !authorization ) {
         res.status(401).json({
             success: false,
-            message: 'Debe iniciar sesión para acceder a este recurso',
+            message: 'Debe iniciar sesión para acceder',
         })
         return
     }
@@ -19,10 +17,21 @@ export const isAuth = (req, res, next) => {
 
     try {
 
-        const { role, id } = jwt.verify(token, process.env.JWT_SECRET)
+        const { cuenta_id, password, rol } = jwt.verify(token, process.env.SECRET_JWT_SEED)
 
-        req.params.role = role
-        req.params.id = id
+        console.log( cuenta_id, password, rol );
+
+        if ( !cuenta_id || !password || !rol ) {
+            res.status(401).json({
+                result: false,
+                message: 'Token inválido o incompleto',
+            })
+            return
+        }
+
+        req.cuenta_id = cuenta_id
+        req.password = password
+        req.rol = rol
 
         next();
 
@@ -30,10 +39,8 @@ export const isAuth = (req, res, next) => {
 
         res.status(401).json({
             success: false,
-            message: 'Debe iniciar sesión para acceder a este recurso',
+            message: 'Token inválido o expirado',
         })
         return
-
     }
-
 }

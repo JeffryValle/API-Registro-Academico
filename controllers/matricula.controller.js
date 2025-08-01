@@ -88,7 +88,7 @@ export const getCursoByStudent = async ( req, res ) => {
 export const crearMatricula = async (req, res) => {
 
     const { usuario, curso } = req.body;
-
+ 
     const id = uuidv4();
 
     try {

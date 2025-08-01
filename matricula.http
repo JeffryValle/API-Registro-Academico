@@ -1,5 +1,13 @@
 ### Obtener matriculas
 GET http://localhost:3000/matriculas
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdWVudGFfaWQiOiIyMDIxMjAwMDc2MSIsInBhc3N3b3JkIjoiMTIzMjEzIiwicm9sIjoiYWRtaW4ifQ.yvBwTn3lbYWqbMHXIlUq0Vjod9138CMFgetIUKDFJFs
+
+{
+    "cuenta_id": "20212000761",
+    "password": "123213",
+    "rol": "admin"
+}
 
 
 ### Ver estudiantes que pertenecen a un curso
