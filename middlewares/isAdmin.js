@@ -1,7 +1,7 @@
 import { verifyAdmin } from "../models/matricula.model.js";
 
 
-export const isAdmin = async (req, res, next) => {
+export const isAdmin = async (req, res, next) => { 
 
     const { cuenta_id, rol } = req
 

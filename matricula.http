@@ -1,29 +1,23 @@
 ### Obtener matriculas
 GET http://localhost:3000/matriculas
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdWVudGFfaWQiOiIyMDIxMjAwMDc2MSIsInBhc3N3b3JkIjoiMTIzMjEzIiwicm9sIjoiYWRtaW4ifQ.yvBwTn3lbYWqbMHXIlUq0Vjod9138CMFgetIUKDFJFs
-
-{
-    "cuenta_id": "20212000761",
-    "password": "123213",
-    "rol": "admin"
-}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdWVudGFfaWQiOiIyMDIxMjAwMDc2MSIsImNvcnJlbyI6ImplZmZyeXZhbGxlOTlAZ21haWwuY29tIiwicGFzc3dvcmQiOiIxMjMyMTMiLCJyb2wiOiJhZG1pbiJ9.cP_MP4RTg3eMSP5lZE2oupqcq4rQNqEQgAd7F8_Sl-A
 
 
 ### Ver estudiantes que pertenecen a un curso
-# GET http://localhost:3000/matriculas/curso/gfgd8erdh5asdf
-# GET http://localhost:3000/matriculas/curso/a1b2c3d4-e5f6-7890-1234-abcdef123456
 GET http://localhost:3000/matriculas/curso/e5f6a7b8-c9d0-1234-5678-ef5678901234
-
-
-### Ver cursos en los que esta inscrito un estudiante
-GET http://localhost:3000/matriculas/usuario/20210000005
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdWVudGFfaWQiOiIyMDIxMjAwMDc2MSIsImNvcnJlbyI6ImplZmZyeXZhbGxlOTlAZ21haWwuY29tIiwicGFzc3dvcmQiOiIxMjMyMTMiLCJyb2wiOiJhZG1pbiJ9.cP_MP4RTg3eMSP5lZE2oupqcq4rQNqEQgAd7F8_Sl-A
 
 ### Crear matricula
 POST http://localhost:3000/matriculas
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdWVudGFfaWQiOiIyMDIxMjAwMDc2MSIsImNvcnJlbyI6ImplZmZyeXZhbGxlOTlAZ21haWwuY29tIiwicGFzc3dvcmQiOiIxMjMyMTMiLCJyb2wiOiJhZG1pbiJ9.cP_MP4RTg3eMSP5lZE2oupqcq4rQNqEQgAd7F8_Sl-A
 
 {
     "usuario": "20212000761",
     "curso": "Base de datos"
 }
+
+### Ver cursos en los que esta inscrito un estudiante
+GET http://localhost:3000/matriculas/usuario/20210000005
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdWVudGFfaWQiOiIyMDIxMjAwMDc2MSIsImNvcnJlbyI6ImplZmZyeXZhbGxlOTlAZ21haWwuY29tIiwicGFzc3dvcmQiOiIxMjMyMTMiLCJyb2wiOiJhZG1pbiJ9.cP_MP4RTg3eMSP5lZE2oupqcq4rQNqEQgAd7F8_Sl-A
