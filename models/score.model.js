@@ -1,18 +1,39 @@
 import pool from '../config/database.js';
 
-export const checkCursoById = async ( curso, cuenta_id ) => {
+export const checkCursoById = async ( curso, cuenta_id, periodo ) => {
 
     const query = `select 
                     m.cuenta_id as Cuenta,
                     c.nombre as Curso
                 from matriculas m
                 inner join cursos c on c.curso_id = m.curso_id
-                where m.cuenta_id = ? AND c.nombre = ?;`;
+                where m.cuenta_id = ? AND c.nombre = ? and m.periodo_id = ? ;`;
 
-    const [ rows ] = await pool.query(query, [ cuenta_id, curso ]);
+    const [ rows ] = await pool.query(query, [ cuenta_id, curso, periodo ]);
 
     return rows
 }   
+
+export const checkCursoByPeriodo = async ( curso, cuenta_id, periodo_id ) => {
+  const query = `
+    select 
+      m.cuenta_id as Cuenta,
+      c.nombre    as Curso,
+      m.periodo_id
+    from matriculas m
+    inner join cursos c 
+      on c.curso_id = m.curso_id
+    where m.cuenta_id   = ?
+      and c.nombre      = ?
+      and m.periodo_id  = ?;
+  `;
+
+  const [ rows ] = await pool.query(query, [ cuenta_id, curso, periodo_id ]);
+  return rows;  
+}
+
+
+
 
 export const modelGetScoreByCurso = async ( curso ) => {
 
@@ -40,4 +61,112 @@ export const modelGetScoreByCurso = async ( curso ) => {
     const [ result ] = await pool.query(query, [ curso ]);
 
     return result
+}
+
+export const modelGetCursosByDocente = async ( id ) => {
+
+    const query = `select
+                    u.cuenta_id  as Cuenta,
+                    u.nombre     as Docente,
+                    r.nombre     as Rol,
+                    (
+                        select json_arrayagg(c2.nombre)
+                        from matriculas m2
+                        join cursos      c2 on c2.curso_id = m2.curso_id
+                        where m2.cuenta_id  = u.cuenta_id
+                        and m2.periodo_id  = 1
+                    ) as Periodo_1,
+                    (
+                        select json_arrayagg(c2.nombre)
+                        from matriculas m2
+                        join cursos      c2 on c2.curso_id = m2.curso_id
+                        where m2.cuenta_id  = u.cuenta_id
+                        and m2.periodo_id  = 2
+                    ) as Periodo_2,
+                    (
+                        select json_arrayagg(c2.nombre)
+                        from matriculas m2
+                        join cursos      c2 on c2.curso_id = m2.curso_id
+                        where m2.cuenta_id  = u.cuenta_id
+                        and m2.periodo_id  = 3
+                    ) as Periodo_3
+
+                    from usuarios u
+                    inner join roles r on r.rol_id = u.rol_id
+                    where u.rol_id = 3
+                    and u.cuenta_id = ?;
+`;
+
+    const [ rows ] = await pool.query(query, [ id ]);
+
+    return rows
+}
+
+export const modelGetStudentsByCurso = async ( curso, periodo ) => {
+
+    const query = `select
+        u.cuenta_id as Cuenta,
+        u.nombre as Estudiante,
+        c.nombre as Curso,
+        m.periodo_id as Periodo
+        from cursos c
+        inner join matriculas m on m.curso_id = c.curso_id
+        inner join usuarios u on u.cuenta_id = m.cuenta_id
+        where c.nombre = ?
+        and u.rol_id != 3 and  u.rol_id != 1 and m.periodo_id = ?;`
+
+    const [ rows ] = await pool.query(query, [ curso, periodo ]);
+
+    return rows
+}
+
+export const modelCantidadCursosByDocente = async ( id, periodo ) => {
+
+    const query = `select count(distinct m.curso_id) as total
+                    from matriculas m
+                    join usuarios u on u.cuenta_id = m.cuenta_id
+                where u.rol_id = 3
+                and u.cuenta_id = ?
+                and m.periodo_id = ?;`;
+
+    const [ rows ] = await pool.query(query, [ id , periodo ]);
+    return rows[0];
+} 
+
+export const existeCurso = async ( curso ) => {
+
+    const query = `select * from cursos where nombre = ?`;
+
+    const [ rows ] = await pool.query(query, [ curso ]);
+    return rows[0];
+
+}
+
+export const modelInscribirDocente = async ( matricula, cuenta_id, curso, periodo ) => {
+
+    let cnx;
+
+    try {
+        
+        cnx = await pool.getConnection();
+
+        await cnx.beginTransaction();
+
+        const query = `INSERT INTO matriculas (matricula_id, cuenta_id, curso_id, periodo_id, resultado) VALUES( ?, ?, (select curso_id from cursos where nombre = ?), ?, '');`;
+
+        const [ result ] = await pool.query(query, [ matricula, cuenta_id, curso, periodo ]);
+
+        await cnx.commit();
+        return result
+
+    } catch (error) {
+        
+        await cnx.rollback();
+        throw error;
+
+    } finally {
+        
+        cnx.release();
+    }
+
 }

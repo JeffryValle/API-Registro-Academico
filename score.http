@@ -1,7 +1,32 @@
+###
 GET http://localhost:3000/calificaciones/curso    
-Content-Type: application/json 
+Content-Type: application/json
 
 {
     "curso": "Calculo I",
     "cuenta_id": "20212000020"
+}
+
+###
+GET http://localhost:3000/calificaciones/docente/cursos/20212000020
+
+
+###
+GET http://localhost:3000/calificaciones/docente/estudiantes
+Content-Type: application/json
+
+{
+    "cuenta_id": "20212000020",
+    "curso": "Calculo I",
+    "periodo": 1
+}
+
+###
+POST http://localhost:3000/calificaciones/docente/inscripcion
+Content-Type: application/json
+
+{
+    "cuenta_id": "20212000020",
+    "curso": "Biología Celular",
+    "periodo": 1
 }

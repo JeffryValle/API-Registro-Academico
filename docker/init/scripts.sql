@@ -116,5 +116,123 @@ group by
   m.matricula_id,
   u.cuenta_id,
   m.curso_id;
+  
+-- Ver docentes y los cursos a los que pertenece
+
+select 
+	u.cuenta_id Cuenta,
+	u.nombre as Docente, 
+    r.nombre as Rol,
+    c.nombre as Curso
+from usuarios u
+inner join roles r on r.rol_id = u.rol_id
+inner join matriculas m on m.cuenta_id = u.cuenta_id
+inner join cursos c on c.curso_id = m.curso_id
+where u.rol_id = 3 and m.cuenta_id = 20212000020;
+
+SELECT
+  u.cuenta_id    AS Cuenta,
+  u.nombre       AS Docente,
+  r.nombre       AS Rol,
+  JSON_ARRAYAGG(c.nombre) AS Cursos
+FROM usuarios u
+INNER JOIN roles r       ON r.rol_id       = u.rol_id
+INNER JOIN matriculas m  ON m.cuenta_id    = u.cuenta_id
+INNER JOIN cursos c      ON c.curso_id     = m.curso_id
+WHERE u.rol_id = 3
+  AND u.cuenta_id = 20212000020
+GROUP BY
+  u.cuenta_id,
+  u.nombre,
+  r.nombre;
+  
+-- 
+  
+SELECT
+  u.cuenta_id    AS Cuenta,
+  u.nombre       AS Docente,
+  r.nombre       AS Rol,
+  pa.nombre      AS Periodo,
+  JSON_ARRAYAGG(c.nombre) AS Cursos
+FROM usuarios u
+INNER JOIN roles r       ON r.rol_id    = u.rol_id
+INNER JOIN matriculas m  ON m.cuenta_id = u.cuenta_id
+INNER JOIN cursos c      ON c.curso_id  = m.curso_id
+INNER JOIN periodo_academico pa
+                       ON pa.periodo_id = m.periodo_id
+WHERE u.rol_id = 3
+  AND u.cuenta_id = 20212000020
+GROUP BY
+  u.cuenta_id,
+  u.nombre,
+  r.nombre,
+  m.periodo_id,
+  pa.nombre
+ORDER BY
+  m.periodo_id;
+
+
+-- Ver estudiantes que están inscritos en un curso
+
+select
+  u.cuenta_id as Cuenta,
+  u.nombre as Estudiante,
+  c.nombre as Curso
+from cursos c
+inner join matriculas m on m.curso_id = c.curso_id
+inner join usuarios u on u.cuenta_id = m.cuenta_id
+where c.nombre = 'Calculo I'
+  and u.rol_id != 3 and  u.rol_id != 1;
+
+
+-- Inscribir un docente a un curso
+
+select 
+      m.cuenta_id as Cuenta,
+      c.nombre    as Curso,
+      m.periodo_id
+    from matriculas m
+    inner join cursos c 
+      on c.curso_id = m.curso_id
+    where m.cuenta_id   = '20212000020'
+      and c.nombre      = 'Calculo I'
+      and m.periodo_id  = 2;
+
+select count(distinct m.curso_id) as total
+from matriculas m
+join usuarios u on u.cuenta_id = m.cuenta_id
+where u.rol_id = 3 and u.cuenta_id = '20212000020';
+
+  
+  -- Me devuelve la cantidad de cursos inscritos por docente segun el periodo
+  select
+  m.periodo_id    as Periodo,
+  count(distinct m.curso_id) as TotalCursos
+from matriculas m
+join usuarios u on u.cuenta_id = m.cuenta_id
+where u.rol_id = 3 and u.cuenta_id = '20212000020'
+group by
+  m.periodo_id
+order by
+  m.periodo_id;
+
+select count(distinct m.curso_id) as total
+from matriculas m
+join usuarios u on u.cuenta_id = m.cuenta_id
+where u.rol_id = 3
+  and u.cuenta_id = '20212000020'
+  and m.periodo_id = 3;
+
+
+
+INSERT INTO matriculas (matricula_id, cuenta_id, curso_id, periodo_id, resultado) VALUES
+('d1f2e3a4-b5c6-47d8-zzz2-1234567890ab', '20212000020', (select curso_id from cursos where nombre = 'Calculo I'), 1, '');
 
 select * from cursos;
+select * from matriculas;
+
+
+
+
+
+
