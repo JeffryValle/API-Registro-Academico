@@ -1,5 +1,16 @@
 import pool from '../config/database.js';
 
+export const verifyProfessor = async ( cuenta_id ) => {
+
+    const query = `SELECT r.nombre as rol FROM usuarios u
+                    inner join roles r on r.rol_id = u.rol_id 
+                    WHERE u.cuenta_id = ?`;
+
+    const [ rows ] = await pool.query( query, [ cuenta_id ] );
+
+    return rows[0] 
+}   
+
 export const checkCursoById = async ( curso, cuenta_id ) => {
 
     const query = `select 
