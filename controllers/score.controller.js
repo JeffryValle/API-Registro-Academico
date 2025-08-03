@@ -1,20 +1,19 @@
 import { 
     checkCursoById, 
-    existeCurso, 
+    checkCursoByPeriodo, 
+    existeCurso,  
     modelCantidadCursosByDocente, 
+    modelExisteNota, 
     modelGetCursosByDocente, 
     modelGetScoreByCurso, 
     modelGetStudentsByCurso,
-    modelInscribirDocente
+    modelGetStudentsByCursoPeriodo,
+    modelInscribirDocente,
+    modelInsertarCalificacion
 } from "../models/score.model.js";
 import { v4 as uuidv4} from 'uuid'
 
 export const getScoreByCurso = async (req, res) => {
-
-    // {
-    //     "curso": "Calculo I",
-    //     "cuenta_id": "20212000020",
-    // }
 
     const { curso, cuenta_id } = req.body;
 
@@ -22,7 +21,7 @@ export const getScoreByCurso = async (req, res) => {
 
         const checkCurso = await checkCursoById( curso, cuenta_id );
 
-        if (checkCurso.length === 0) {
+        if ( checkCurso.length === 0 ) {
             res.status(404).json({ message: "Curso no encontrado o no pertenece al docente" });
             return;
         }
@@ -83,7 +82,7 @@ export const getStudentsByCurso = async (req, res) => {
 
     try {
         
-        const checkCurso = await checkCursoById( curso, cuenta_id, periodo );
+        const checkCurso = await checkCursoById( curso, cuenta_id );
         if ( checkCurso.length === 0 ) {
             res.status(404).json({ message: "Curso no encontrado o no pertenece al docente" });
             return;
@@ -108,7 +107,7 @@ export const getStudentsByCurso = async (req, res) => {
     }
 }
 
-export const inscribirDocente = async (req, res) => {
+export const inscribirDocente = async ( req, res ) => {
 
     const { cuenta_id, curso, periodo } = req.body;
 
@@ -127,7 +126,7 @@ export const inscribirDocente = async (req, res) => {
             return;
         }
 
-        const checkCurso = await checkCursoById( curso, cuenta_id, periodo );
+        const checkCurso = await checkCursoByPeriodo( curso, cuenta_id, periodo );
 
         if ( checkCurso.length > 0 ) {
             res.status(400).json({ message: "El docente ya está inscrito en este curso en este periodo" });
@@ -159,4 +158,100 @@ export const inscribirDocente = async (req, res) => {
         return;
         
     }
+}
+
+export const postearNotas = async ( req, res ) => {
+
+    const { curso, cuenta_id, nota, periodo_id, subperiodo_id: parcial } = req.body;
+
+    try {
+
+        const cursoExiste = await existeCurso( curso );
+
+        if ( !cursoExiste ) {
+            res.status(404).json({ message: "No existe el curso al cual desea inscribirse" });
+            return;
+        }
+
+        const students = await modelGetStudentsByCursoPeriodo( curso, cuenta_id,  periodo_id );
+
+        if ( students.length === 0 ) {
+            res.status(404).json({ message: "No se encontraron estudiantes inscritos en el curso o inscritos en ese periodo" });
+            return;
+        }
+
+        const existeNota = await modelExisteNota( curso, cuenta_id, periodo_id, parcial );
+
+        if ( existeNota ) {
+            res.status( 400 ).json({ message: "Ya se ha insertado esta calificacion previamente" });
+            return;
+        }
+    
+        const matricula = students[0].Matricula;
+
+        const insertado = await modelInsertarCalificacion( matricula, nota, parcial );
+
+        if ( !insertado ) { 
+            res.status( 422 ).json({ message: "No se pudo insertar la calificación" });
+            return
+        }
+
+        res.status( 200 ).json({ 
+            message: "Calificación Insertada al Sistema",
+            data: {
+                curso, cuenta_id, nota, periodo_id, subperiodo_id: parcial 
+            }
+        });
+            return
+        
+    } catch (error) {
+        
+        res.status( 500 ).json({ message: "Sucedió un error, verificar", error: error.message })
+
+    }
+}
+
+export const actualizarNotas = async ( req, res ) => {
+
+    const { curso, cuenta_id, nota, periodo_id, subperiodo_id: parcial } = req.body;
+
+    try {
+
+        const cursoExiste = await existeCurso( curso );
+
+        if ( !cursoExiste ) {
+            res.status(404).json({ message: "No existe el curso al cual desea inscribirse" });
+            return;
+        }
+
+        const students = await modelGetStudentsByCursoPeriodo( curso, cuenta_id,  periodo_id );
+
+        if ( students.length === 0 ) {
+            res.status(404).json({ message: "No se encontraron estudiantes inscritos en el curso o inscritos en ese periodo" });
+            return;
+        }
+    
+        const matricula = students[0].Matricula;
+
+        const insertado = await modelInsertarCalificacion( matricula, nota, parcial );
+
+        if ( !insertado ) { 
+            res.status( 422 ).json({ message: "No se pudo insertar la calificación" });
+            return
+        }
+
+        res.status( 200 ).json({ 
+            message: "Calificación Insertada al Sistema",
+            data: {
+                curso, cuenta_id, nota, periodo_id, subperiodo_id: parcial 
+            }
+        });
+            return
+        
+    } catch (error) {
+        
+        res.status( 500 ).json({ message: "Sucedió un error, verificar", error: error.message })
+
+    }
+
 }

@@ -1,15 +1,15 @@
 import pool from '../config/database.js';
 
-export const checkCursoById = async ( curso, cuenta_id, periodo ) => {
+export const checkCursoById = async ( curso, cuenta_id ) => {
 
     const query = `select 
                     m.cuenta_id as Cuenta,
                     c.nombre as Curso
                 from matriculas m
                 inner join cursos c on c.curso_id = m.curso_id
-                where m.cuenta_id = ? AND c.nombre = ? and m.periodo_id = ? ;`;
+                where m.cuenta_id = ? AND c.nombre = ? ;`;
 
-    const [ rows ] = await pool.query(query, [ cuenta_id, curso, periodo ]);
+    const [ rows ] = await pool.query(query, [ cuenta_id, curso ]);
 
     return rows
 }   
@@ -120,6 +120,25 @@ export const modelGetStudentsByCurso = async ( curso, periodo ) => {
     return rows
 }
 
+export const modelGetStudentsByCursoPeriodo = async ( curso, cuenta_id ,periodo_id ) => {
+
+    const query = `select
+        m.matricula_id as Matricula,
+        u.cuenta_id as Cuenta,
+        u.nombre as Estudiante,
+        c.nombre as Curso,
+        m.periodo_id as Periodo
+        from cursos c
+        inner join matriculas m on m.curso_id = c.curso_id
+        inner join usuarios u on u.cuenta_id = m.cuenta_id
+        where c.nombre = ? and m.cuenta_id = ?
+        and u.rol_id != 3 and  u.rol_id != 1 and m.periodo_id = ?;`
+
+    const [ rows ] = await pool.query(query, [ curso, cuenta_id ,periodo_id ]);
+
+    return rows
+}
+
 export const modelCantidadCursosByDocente = async ( id, periodo ) => {
 
     const query = `select count(distinct m.curso_id) as total
@@ -135,7 +154,7 @@ export const modelCantidadCursosByDocente = async ( id, periodo ) => {
 
 export const existeCurso = async ( curso ) => {
 
-    const query = `select * from cursos where nombre = ?`;
+    const query = `select * from cursos where nombre = ?;`;
 
     const [ rows ] = await pool.query(query, [ curso ]);
     return rows[0];
@@ -169,4 +188,55 @@ export const modelInscribirDocente = async ( matricula, cuenta_id, curso, period
         cnx.release();
     }
 
+}
+
+export const modelInsertarCalificacion = async ( matricula_id, nota, parcial ) => {
+
+    let cnx;
+
+    try {
+
+        cnx = await pool.getConnection();
+
+        await cnx.beginTransaction();
+        
+        const query = `INSERT INTO calificaciones 
+        (matricula_id, nota, subperiodo_id) VALUES ( ?, ?, ?);`;
+
+        await cnx.execute( query, [ matricula_id, nota, parcial ] );
+
+        cnx.commit();
+        return true;
+
+    } catch (error) {
+
+        await cnx.rollback();
+
+    } finally {
+
+        cnx.release();
+
+    }
+
+}
+
+export const modelExisteNota = async ( curso, cuenta_id, periodo_id, parcial ) => {
+
+    const query = `
+        SELECT EXISTS (
+        SELECT 1
+        FROM calificaciones cf
+        INNER JOIN matriculas m 
+            ON cf.matricula_id = m.matricula_id
+        INNER JOIN cursos c 
+            ON m.curso_id = c.curso_id
+        WHERE c.nombre        = ?
+            AND m.cuenta_id     = ?
+            AND m.periodo_id    = ?
+            AND cf.subperiodo_id= ?
+        ) AS ya_existe;`;
+
+    const [ row ] = await pool.query( query, [ curso, cuenta_id, periodo_id, parcial  ] );
+
+    return row;
 }
