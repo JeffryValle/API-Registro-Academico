@@ -3,12 +3,13 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import matriculaRouter from './routes/matriculas.routes.js';
 import scoreRouter from './routes/score.routes.js';
+import authRouter from './routes/auth.routes.js';
 
 const app = express();
 
 app.use(express.json());
 
-app.use(cors());
+app.use( cors() );
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ const port = process.env.PORT || 3000;
 // rutas de matriculas
 app.use( '/matriculas', matriculaRouter );
 app.use( '/calificaciones', scoreRouter );
+app.use( '/auth', authRouter );
 
 
 app.listen( port, () => {

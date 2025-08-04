@@ -9,6 +9,7 @@ CREATE TABLE roles (
     descripcion VARCHAR(150) NOT NULL
 );
 
+
 create table usuarios (
 	cuenta_id varchar(12) primary key not null,
     nombre varchar(200) not null,

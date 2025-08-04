@@ -1,5 +1,14 @@
 use registro_academico;
 
+select * from usuarios;
+
+select cuenta_id from usuarios where cuenta_id = '20212000020';
+select correo from usuarios where correo = 'jeffryvalle99@gmail.com';
+
+SELECT r.nombre as rol FROM usuarios u
+	inner join roles r on r.rol_id = u.rol_id 
+	WHERE u.cuenta_id = 20212000020;
+
 -- Ver Estudiantes y Docentes a los cursos que pertencen
 SELECT 
 	m.matricula_id AS Matricula,
@@ -277,5 +286,8 @@ inner join matriculas m on m.matricula_id = c.matricula_id
 inner join cursos cr on cr.curso_id = m.curso_id 
 where m.cuenta_id = '20212000005';
 
-
+-- Insertar usuarios 
+INSERT INTO usuarios (cuenta_id, nombre, correo, telefono, password_hash, rol_id) 
+VALUES ('20212000001', 'Jeffry Espinal Valle', 'jeffryvalle99@gmail.com', '99981234', '1234', 
+(select rol_id from roles where nombre = 'estudiante'));
 
