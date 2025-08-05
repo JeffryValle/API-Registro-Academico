@@ -10,7 +10,7 @@ CREATE TABLE roles (
 );
 
 create table usuarios (
-	cuenta_id varchar(12) primary key not null,
+	cuenta_id BINARY(16) primary key not null,
     nombre varchar(200) not null,
     correo varchar(150) not null unique,
     telefono varchar(12) not null,
@@ -22,7 +22,7 @@ create table usuarios (
 );
 
 create table cursos (
-	curso_id char(36) primary key not null,
+	curso_id BINARY(16) primary key not null,
     nombre varchar(255) unique not null,
     cupos int not null
 );
@@ -39,9 +39,9 @@ CREATE TABLE sub_periodo (
 );
 
 CREATE TABLE matriculas (
-	matricula_id char(36) primary key not null,
-    cuenta_id varchar(12) not null,
-    curso_id char(36) not null,
+	matricula_id BINARY(16) primary key not null,
+    cuenta_id BINARY(16) not null,
+    curso_id BINARY(16) not null,
     periodo_id INT NOT NULL,
     resultado varchar(12) null, -- para saber si esta fue aprobada o reprobada
     fecha_creado timestamp default current_timestamp,
@@ -54,7 +54,7 @@ CREATE TABLE matriculas (
 
 CREATE TABLE calificaciones (
     calificacion_id INT PRIMARY KEY AUTO_INCREMENT,
-    matricula_id char(36) NOT NULL,
+    matricula_id BINARY(16) NOT NULL,
     nota DECIMAL(5,2) NOT NULL,
     fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP,
     subperiodo_id int not null,

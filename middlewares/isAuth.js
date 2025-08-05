@@ -3,9 +3,9 @@ import jwt from 'jsonwebtoken';
 
 export const isAuth = (req, res, next) => {
 
-    const { authorization } = req.headers
+    const { Authorization } = req.headers
 
-    if ( !authorization ) {
+    if ( !Authorization ) {
         res.status(401).json({
             success: false,
             message: 'Debe iniciar sesión para acceder',
@@ -30,9 +30,10 @@ export const isAuth = (req, res, next) => {
             return
         }
 
-        const { cuenta_id, correo, password, rol } = payload;
+        const { cuenta_id, correo, rol } = payload;
 
-        if ( !cuenta_id || !correo || !password || !rol ) {
+        if (!cuenta_id || !correo || !rol) {
+
             res.status(401).json({
                 result: false,
                 message: 'Este token no es válido',
@@ -50,6 +51,7 @@ export const isAuth = (req, res, next) => {
         res.status(401).json({
             success: false,
             message: 'Token inválido o expirado',
+            error: error.message
         })
         return
     }
