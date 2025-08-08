@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken' // para generar el token
 import bcrypt from 'bcrypt'
-import { loginUser, register} from '../models/auth.js' // importar el modelo de autenticación
+import { loginUser, register, updatePassword} from '../models/auth.js' // importar el modelo de autenticación
 // import { Resend } from 'resend'
 import { v4 as uuidv4 } from 'uuid';
 
@@ -113,5 +113,59 @@ export const createUser = async (req, res) => {
             message: 'Error al crear el usuario',
             error: error.message
         })
+    }
+}
+
+
+export const setPassword = async (req, res) => {
+
+    const { authorization } = req.headers
+    const token = authorization.split(' ')[1]
+    const
+        {
+            old_password,
+            new_password,
+            confirm_password
+        } = req.body
+
+    try {
+        const { id, password } = jwt.verify(token, process.env.SECRET_JWT_SEED)
+
+        if (!await bcrypt.compare(old_password, password)) {
+            res.status(401).json({
+                success: false,
+                message: 'La contraseña anterior no es correcta',
+            })
+
+            return
+        }
+
+        // validar que las contraseñas nuevas coincidan
+        if (new_password !== confirm_password) {
+            res.status(400).json({
+                success: false,
+                message: 'Las contraseñas nueva y de confirmación no coinciden',
+            })
+
+            return
+        }
+
+        const passwordHash = await bcrypt.hash(new_password, 10)
+
+        await updatePassword(id, passwordHash)
+
+
+        res.json({
+            success: true,
+            message: 'Contraseña actualizada correctamente'
+        })
+    }
+    catch (error) {
+        res.status(401).json({
+            success: false,
+            message: 'Debe iniciar sesión para cambiar la contraseña',
+            error: error.message
+        })
+        return
     }
 }

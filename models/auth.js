@@ -4,7 +4,7 @@ export const loginUser = async (user) => {
 
     // obtener el registro del usuario
     const query = `SELECT 
-                        cuenta_id as cuenta_id,  
+                        BIN_TO_UUID(cuenta_id) as cuenta_id,  
                         nombre,
                         correo,
                         telefono,
@@ -40,7 +40,7 @@ export const register = async (user) => {
 export const updatePassword = async (id, password_hash) => {
 
     const query = `UPDATE usuarios SET password_hash = ?,
-             cambio_password = 0 WHERE cuenta_id = ?;`
+             cambio_password = 0 WHERE cuenta_id = UUID_TO_BIN(?);`
 
 
     const [rows] = await pool.query(query, [password_hash, id])
