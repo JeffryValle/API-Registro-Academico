@@ -3,7 +3,7 @@ import pool from '../config/database.js';
 
 export const getAllUsuarios = async ()=>{
     const query = `SELECT 
-                    u.cuenta_id,
+                    BIN_TO_UUID(u.cuenta_id) AS cuenta_id,
                     u.nombre,
                     u.correo,
                     u.telefono,
