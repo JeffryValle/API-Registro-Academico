@@ -3,9 +3,9 @@ import jwt from 'jsonwebtoken';
 
 export const isAuth = (req, res, next) => {
 
-    const { Authorization } = req.headers
+    const { authorization } = req.headers
 
-    if ( !Authorization ) {
+    if ( !authorization ) {
         res.status(401).json({
             success: false,
             message: 'Debe iniciar sesión para acceder',
@@ -31,6 +31,8 @@ export const isAuth = (req, res, next) => {
         }
 
         const { cuenta_id, correo, rol } = payload;
+
+        console.log(cuenta_id, correo, rol);
 
         if (!cuenta_id || !correo || !rol) {
 

@@ -4,15 +4,18 @@ export const loginUser = async (user) => {
 
     // obtener el registro del usuario
     const query = `SELECT 
-                        BIN_TO_UUID(cuenta_id) as cuenta_id,  
-                        nombre,
-                        correo,
-                        telefono,
-                        password_hash,
-                        cambio_password,
-                        fecha_creado,
-                        rol_id  
-                        FROM usuarios WHERE correo = ?;`
+                        BIN_TO_UUID(u.cuenta_id) AS cuenta_id,  
+                        u.nombre,
+                        u.correo,
+                        u.telefono,
+                        u.password_hash,
+                        u.cambio_password,
+                        u.fecha_creado,
+                        u.rol_id,
+                        r.nombre AS rol_nombre
+                    FROM usuarios AS u
+                    INNER JOIN roles AS r ON r.rol_id = u.rol_id
+                    WHERE u.correo = ?;`
 
     const [results] = await pool.query(query, [user])
 

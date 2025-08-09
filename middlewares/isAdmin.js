@@ -9,6 +9,8 @@ export const isAdmin = async (req, res, next) => {
         
         const esAdmin = await verifyAdmin( cuenta_id ); 
         
+        console.log(esAdmin["Rol"] +" = "+ rol)
+
         if ( esAdmin["Rol"] !== rol ) {
             res.status(401).json({
                 success: false,

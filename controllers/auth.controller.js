@@ -27,7 +27,7 @@ export const login = async (req, res) => {
         // obligarlo a cambiar de contraseña
         const tokenTemporal = jwt.sign({
             id: data.cuenta_id,
-            password: data.password_hash
+            password: data.password_hash,
         }, process.env.SECRET_JWT_SEED, {
             expiresIn: '1h'
         })
@@ -47,10 +47,13 @@ export const login = async (req, res) => {
     // puedo retornar la información del usuario
 
     const payload = {
-        id: data.cuenta_id,
-        role: data.rol_id,
+        cuenta_id: data.cuenta_id,
+        correo: data.correo,
+        rol: data.rol_nombre,
 
     }
+
+    console.log(payload)
 
     const token = jwt.sign(payload, process.env.SECRET_JWT_SEED, {
         algorithm: 'HS256', // Sha2

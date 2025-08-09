@@ -6,7 +6,7 @@ export const verifyAdmin = async ( id ) => {
                         r.nombre AS Rol 
                     FROM usuarios AS u
                     INNER JOIN roles AS r ON r.rol_id = u.rol_id
-                    WHERE u.cuenta_id = ? ;`;
+                    WHERE u.cuenta_id = UUID_TO_BIN(?) ;`;
 
     const [ rows ] = await pool.query( query, [ id ] );
 

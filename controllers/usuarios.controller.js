@@ -11,7 +11,7 @@ export const getAll = async (req, res) => {
     }
     catch (error){
         res.status(400).json({
-            message: 'Error al obtener las peliculas' + error.message
+            message: 'Error al obtener los usuarios' + error.message
         })
     }
 }
