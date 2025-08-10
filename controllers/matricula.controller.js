@@ -87,21 +87,22 @@ export const getCursoByStudent = async ( req, res ) => {
 //? Matricularse en un curso
 export const crearMatricula = async (req, res) => {
 
-    const { usuario, curso } = req.body;
+    const { cuenta, curso, periodo } = req.body;
  
     const id = uuidv4();
 
     try {
         
-        const existeMatricula = await validateMatricula( usuario, curso );
+        const existeMatricula = await validateMatricula( cuenta, curso, periodo );
 
         if ( existeMatricula ) {
             res.status( 400 ).json({ message: "El estudiante ya está matriculado en este curso" });
             return 
         }
 
-        const matriculas = await cantidadMatriculas( usuario );
+        const matriculas = await cantidadMatriculas( cuenta );
 
+        
         if ( matriculas.length >= 5 ) {
             res.status( 400 ).json({ message: "El estudiante ya está inscrito en 5 cursos, no puede inscribirse en más" });
             return
@@ -114,8 +115,7 @@ export const crearMatricula = async (req, res) => {
             return
         }
 
-        const crear = await crearMatriculaModel( id, usuario, curso );
-        console.log( crear );
+        const crear = await crearMatriculaModel( id, cuenta, curso, periodo );
 
         if ( !crear ) {
             res.status( 400 ).json({ message: "Error al crear la matrícula" });
@@ -125,7 +125,7 @@ export const crearMatricula = async (req, res) => {
         res.status( 201 ).json({
             success: true,
             message: "Matrícula creada correctamente",
-            data: { id, usuario, curso }
+            data: { id, cuenta, curso, periodo }
         });
 
     } catch (error) {

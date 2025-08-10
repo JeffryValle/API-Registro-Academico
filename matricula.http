@@ -1,22 +1,32 @@
 ### Obtener matriculas
 GET http://localhost:3000/matriculas
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdWVudGFfaWQiOiIyMDIxMjAwMDAwMSIsImNvcnJlbyI6ImplZmZyeXZhbGxlOTlAZ21haWwuY29tIiwicGFzc3dvcmQiOiIxMjM0Iiwicm9sIjoiYWRtaW4ifQ.Hk4GHB5DzRSw6_sHb2kC2GEzieKxD-2OGERoevin36w
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdWVudGFfaWQiOiI3Y2E4ZjlhZi1lN2NmLTQyMDQtYjgzNi00MTRkYjlkOWJmMTMiLCJjb3JyZW8iOiJqZWZmcnkuZXNwaW5hbEB1bmFoLmhuIiwicm9sIjoiYWRtaW4iLCJpYXQiOjE3NTQ4NDkzMzIsImV4cCI6MTc1NDg5MjUzMn0.Lb7ir9SC0pjMb2CAw4nPR-4yqC8pksms5Vg-vmXcjbQ
+
+
 
 ### Ver estudiantes que pertenecen a un curso
-GET http://localhost:3000/matriculas/curso/550e8400-e29b-41d4-a716-446655440001
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdWVudGFfaWQiOiIyMDIxMjAwMDAwMSIsImNvcnJlbyI6ImplZmZyeXZhbGxlOTlAZ21haWwuY29tIiwicGFzc3dvcmQiOiIxMjM0Iiwicm9sIjoiYWRtaW4ifQ.Hk4GHB5DzRSw6_sHb2kC2GEzieKxD-2OGERoevin36w
+GET http://localhost:3000/matriculas/curso/494a5828-760c-11f0-8878-c2c469bd52ea
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdWVudGFfaWQiOiI3Y2E4ZjlhZi1lN2NmLTQyMDQtYjgzNi00MTRkYjlkOWJmMTMiLCJjb3JyZW8iOiJqZWZmcnkuZXNwaW5hbEB1bmFoLmhuIiwicm9sIjoiYWRtaW4iLCJpYXQiOjE3NTQ4NDkzMzIsImV4cCI6MTc1NDg5MjUzMn0.Lb7ir9SC0pjMb2CAw4nPR-4yqC8pksms5Vg-vmXcjbQ
+
+
+
+
+### Ver cursos en los que esta inscrito un estudiante/docente
+GET http://localhost:3000/matriculas/usuario/f44df6fd-760b-11f0-8878-c2c469bd52ea
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdWVudGFfaWQiOiI3Y2E4ZjlhZi1lN2NmLTQyMDQtYjgzNi00MTRkYjlkOWJmMTMiLCJjb3JyZW8iOiJqZWZmcnkuZXNwaW5hbEB1bmFoLmhuIiwicm9sIjoiYWRtaW4iLCJpYXQiOjE3NTQ4NDkzMzIsImV4cCI6MTc1NDg5MjUzMn0.Lb7ir9SC0pjMb2CAw4nPR-4yqC8pksms5Vg-vmXcjbQ
+
+
+
 
 ### Crear matricula
 POST http://localhost:3000/matriculas
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdWVudGFfaWQiOiIyMDIxMjAwMDc2MSIsImNvcnJlbyI6ImplZmZyeXZhbGxlOTlAZ21haWwuY29tIiwicGFzc3dvcmQiOiIxMjMyMTMiLCJyb2wiOiJhZG1pbiJ9.cP_MP4RTg3eMSP5lZE2oupqcq4rQNqEQgAd7F8_Sl-A
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdWVudGFfaWQiOiI3Y2E4ZjlhZi1lN2NmLTQyMDQtYjgzNi00MTRkYjlkOWJmMTMiLCJjb3JyZW8iOiJqZWZmcnkuZXNwaW5hbEB1bmFoLmhuIiwicm9sIjoiYWRtaW4iLCJpYXQiOjE3NTQ4NDkzMzIsImV4cCI6MTc1NDg5MjUzMn0.Lb7ir9SC0pjMb2CAw4nPR-4yqC8pksms5Vg-vmXcjbQ
 
 {
-    "usuario": "20212000761",
-    "curso": "Base de datos"
+    "cuenta": "f44df6fd-760b-11f0-8878-c2c469bd52ea",
+    "curso": "Redes de Computadoras",
+    "periodo": 1
 }
 
-### Ver cursos en los que esta inscrito un estudiante
-GET http://localhost:3000/matriculas/usuario/20212000007
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdWVudGFfaWQiOiIyMDIxMjAwMDAwMSIsImNvcnJlbyI6ImplZmZyeXZhbGxlOTlAZ21haWwuY29tIiwicGFzc3dvcmQiOiIxMjM0Iiwicm9sIjoiYWRtaW4ifQ.Hk4GHB5DzRSw6_sHb2kC2GEzieKxD-2OGERoevin36w

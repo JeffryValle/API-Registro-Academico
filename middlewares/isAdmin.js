@@ -26,6 +26,6 @@ export const isAdmin = async (req, res, next) => {
             success: false,
             message: 'Error interno del servidor.',
         });
-    }
+    } 
 
 }

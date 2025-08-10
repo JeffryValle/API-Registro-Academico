@@ -16,13 +16,13 @@ export const verifyAdmin = async ( id ) => {
 export const getMatriculas = async () => {
 
     const query = `SELECT 
-                    m.matricula_id AS Matricula,
+                    BIN_TO_UUID(m.matricula_id) AS Matricula,
                     u.nombre AS Nombre,
-                    u.cuenta_id AS Cuenta,
+                    BIN_TO_UUID(u.cuenta_id) AS Cuenta,
                     c.nombre AS Curso,
-                    c.curso_id AS CodigoCurso
+                    BIN_TO_UUID(c.curso_id) AS CodigoCurso
                 FROM matriculas AS m
-                INNER JOIN usuarios AS u ON u.cuenta_id = m.usuario_id
+                INNER JOIN usuarios AS u ON u.cuenta_id = m.cuenta_id
                 INNER JOIN cursos AS c ON c.curso_id = m.curso_id;`;
 
     const [ results ] = await pool.query( query );
@@ -33,15 +33,15 @@ export const getMatriculas = async () => {
 export const getEstudiantesByCurso = async ( id ) => {
 
     const query = `SELECT 
-                    c.curso_id as CodigoCurso,
+                    BIN_TO_UUID(c.curso_id) as CodigoCurso,
+                    BIN_TO_UUID(u.cuenta_id) AS Cuenta,
                     c.nombre AS Curso,
                     u.nombre AS Nombre,
-                    u.cuenta_id AS Cuenta,
                     u.correo as Correo
                 FROM matriculas AS m
-                INNER JOIN usuarios AS u ON u.cuenta_id = m.usuario_id
+                INNER JOIN usuarios AS u ON u.cuenta_id = m.cuenta_id
                 INNER JOIN cursos AS c ON c.curso_id = m.curso_id
-                WHERE c.curso_id = ? ;`;
+                WHERE m.curso_id = UUID_TO_BIN('494a5828-760c-11f0-8878-c2c469bd52ea');`;
 
     const [ results ] = await pool.query( query, [ id ] );
     return results;
@@ -50,42 +50,46 @@ export const getEstudiantesByCurso = async ( id ) => {
 export const cursosByStudent = async ( cuenta ) => {
 
     const query = `SELECT
-                    u.cuenta_id AS Cuenta,
+                    BIN_TO_UUID(u.cuenta_id) AS Cuenta,
                     u.nombre AS Estudiante,
-                    c.curso_id as CodigoCurso,
+                    BIN_TO_UUID(c.curso_id) as CodigoCurso,
                     c.nombre AS Curso,
                     c.cupos AS Cupos,
                     m.fecha_Creado AS FechaInscripcion
                 FROM matriculas AS m
-                INNER JOIN usuarios AS u ON u.cuenta_id = m.usuario_id
+                INNER JOIN usuarios AS u ON u.cuenta_id = m.cuenta_id
                 INNER JOIN cursos AS c ON c.curso_id = m.curso_id
-                WHERE u.cuenta_id = ? ;`;
+                WHERE u.cuenta_id = UUID_TO_BIN( ? );`;
 
     const [ registros ] = await pool.query( query, [ cuenta ] );
     return registros;
 }
 
-export const validateMatricula = async ( usuario, curso ) => {
+export const validateMatricula = async ( cuenta, curso, periodo ) => {
 
     const query = `SELECT 
-                    m.matricula_id AS Matricula,
-                    m.usuario_id AS Cuenta,
+                    BIN_TO_UUID(m.matricula_id) AS Matricula,
+                    BIN_TO_UUID(m.cuenta_id) AS Cuenta,
                     c.nombre AS Curso,
-                    m.fecha_creado AS FechaInscripcion
+                    m.fecha_creado AS FechaInscripcion,
+                    m.periodo_id as Periodo
                 FROM matriculas AS m
                 INNER JOIN cursos AS c on c.curso_id = m.curso_id
-                WHERE m.usuario_id = ? AND c.nombre = ? ;`
+                WHERE 
+					m.cuenta_id = UUID_TO_BIN(?) 
+                    AND c.nombre = ? 
+                    AND m.periodo_id = ? ;`
 
-    const [ result ] = await pool.query( query, [ usuario, curso ] );
+    const [ result ] = await pool.query( query, [ cuenta, curso, periodo ] );
 
     return result[0];
 }
 
-export const cantidadMatriculas = async ( id ) => {
+export const cantidadMatriculas = async ( cuenta ) => {
 
-    const query = `SELECT * FROM matriculas WHERE usuario_id = ? ;`;
+    const query = `SELECT * FROM matriculas WHERE cuenta_id = UUID_TO_BIN( ? ) ;`;
 
-    const [ rows ] = await pool.query( query, [ id ] );
+    const [ rows ] = await pool.query( query, [ cuenta ] );
 
     return rows;
 }
@@ -93,11 +97,11 @@ export const cantidadMatriculas = async ( id ) => {
 export const existeCupo = async ( curso ) => {
 
     const query = `SELECT 
-                    c.curso_id AS CodigoCurso,
+                    BIN_TO_UUID(c.curso_id) as CodigoCurso,
                     c.nombre AS Curso,
                     c.cupos AS Cupos,
-                    COUNT(m.usuario_id) AS Inscritos,
-                    (c.cupos - COUNT(m.usuario_id)) AS Disponibles
+                    COUNT(m.cuenta_id) AS Inscritos,
+                    (c.cupos - COUNT(m.cuenta_id)) AS Disponibles
                 FROM cursos c
                 LEFT JOIN matriculas m ON m.curso_id = c.curso_id
                 WHERE c.nombre = ?
@@ -108,7 +112,7 @@ export const existeCupo = async ( curso ) => {
     return result[0];
 }
 
-export const crearMatriculaModel = async ( id, usuario, curso ) => {
+export const crearMatriculaModel = async ( id, cuenta, curso, periodo ) => {
 
     let cnx;
 
@@ -118,12 +122,10 @@ export const crearMatriculaModel = async ( id, usuario, curso ) => {
         
         await cnx.beginTransaction();
 
-        const query = `INSERT INTO matriculas ( matricula_id, usuario_id, curso_id)
-                        VALUES ( ?, ?,
-                            (SELECT curso_id FROM cursos WHERE nombre = ? )
-                        );`;
+        const query = `INSERT INTO matriculas (matricula_id, cuenta_id, curso_id, periodo_id)
+        VALUES ( UUID_TO_BIN( ? ), UUID_TO_BIN( ? ), UUID_TO_BIN((SELECT BIN_TO_UUID(curso_id) FROM cursos WHERE nombre = ? )), ?);`;
 
-        await cnx.execute( query, [ id, usuario, curso ] );
+        await cnx.execute( query, [ id, cuenta, curso, periodo ] );
 
         await cnx.commit();
         return true;

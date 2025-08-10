@@ -82,22 +82,10 @@ export const createUser = async (req, res) => {
 
     //generar una clave
     //TODO: generar una clave aleatoria
-    const password_hash = await bcrypt.hash(password, 10)
+    const password_hash = await bcrypt.hash( password, Number( process.env.SALT ))
 
     try {
         const result = await register([id, name, email, phone, password_hash, role])
-
-        // // TODO: envair correro
-        // console.log(process.env.RESEND_API_KEY)
-        // const resend = new Resend(process.env.RESEND_API_KEY)
-
-        // await resend.emails.send({
-        //     from: 'noreply@esshn.com',
-        //     to: email,
-        //     subject: 'Creación de cuenta',
-        //     html: '<p>esta es tu clave temporal: <strong> 1234 </strong>  </p>',
-        // });
-
 
         res.json({
             success: true,

@@ -15,4 +15,4 @@ matriculaRouter.get('/curso/:id', [ isAuth, isAdmin ], getStudentsByCurso);
 matriculaRouter.get('/usuario/:id', [ isAuth ], getCursoByStudent);
 matriculaRouter.post('/', [ isAuth ], crearMatricula );
 
-export default matriculaRouter;
+export default matriculaRouter; 

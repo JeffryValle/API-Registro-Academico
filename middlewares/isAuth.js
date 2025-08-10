@@ -28,7 +28,7 @@ export const isAuth = (req, res, next) => {
                 message: 'Su token ha expirado. Por favor, inicie sesión nuevamente.',
             })
             return
-        }
+        } 
 
         const { cuenta_id, correo, rol } = payload;
 
