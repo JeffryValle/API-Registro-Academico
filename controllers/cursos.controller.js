@@ -25,7 +25,7 @@ export const listCursos = async (req, res) => {
     }
 
     catch(error){
-        res.status(500).json({message: "Error interno del servidor"}); 
+        res.status(500).json({message: "Error interno del servidor", error: error.message}); 
     }
 }
 
@@ -194,7 +194,7 @@ export const actualizarCurso = async (req, res) => {
 }
 
 
-export const elimarCurso = async (req, res) => {
+export const eliminarCurso = async (req, res) => {
 
     try{
 
