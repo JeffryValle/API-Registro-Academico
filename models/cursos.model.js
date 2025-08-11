@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 export const createCurso = async (curso) => {
     const id = uuidv4();
 
-    const query = 'INSERT INTO cursos (curso_id, nombre, cupos) VALUES (?, ?, ?) ;'
+    const query = 'INSERT INTO cursos (curso_id, nombre, cupos) VALUES (UUID_TO_BIN(?), ?, ?);';
 
     const [result] = await pool.query(query, [id, curso.nombre, curso.cupos]);
 
@@ -26,7 +26,7 @@ export const findByNombre = async (nombre) => {
 
 export const getAllCursos = async () => {
 
-    const query= 'SELECT * FROM cursos ;'
+    const query= 'SELECT BIN_TO_UUID(curso_id) AS curso_id, nombre, cupos FROM cursos;'
 
     const [rows] = await pool.query(query);
 
@@ -36,7 +36,7 @@ export const getAllCursos = async () => {
 
 export const getCursoByID = async ( curso_id ) => {
 
-    const query = 'SELECT nombre, cupos FROM cursos WHERE curso_id = ? ;';
+    const query = 'SELECT BIN_TO_UUID(curso_id) AS curso_id, nombre, cupos FROM cursos WHERE curso_id = UUID_TO_BIN(?);';
 
     const [ rows ] = await pool.query( query, [ curso_id ] );
 
@@ -46,7 +46,7 @@ export const getCursoByID = async ( curso_id ) => {
 
 export const updateCurso = async ( curso_id, curso) => {
 
-    const query = 'UPDATE cursos SET nombre = ? , cupos = ? WHERE curso_id = ? ;'; 
+    const query = 'UPDATE cursos SET nombre = ?, cupos = ? WHERE curso_id = UUID_TO_BIN(?);';
 
     const [result] = await pool.query(query, [curso.nombre, curso.cupos, curso_id]); 
 
@@ -57,7 +57,7 @@ export const updateCurso = async ( curso_id, curso) => {
 
 export const deleteCurso = async (curso_id) => {
 
-    const query = 'DELETE FROM cursos WHERE curso_id = ?;';
+    const query = 'DELETE FROM cursos WHERE curso_id = UUID_TO_BIN(?);';
 
     const [result] = await pool.query(query, [curso_id]);
 
