@@ -15,7 +15,7 @@ const cursosrouter = Router();
 cursosrouter.get("/", listCursos);
 cursosrouter.get("/nombre", [ isAuth, isAdmin ], getCursosbyName);
 cursosrouter.post("/", [ isAuth, isAdmin ], crearCurso);
-cursosrouter.put("/curso_id", [ isAuth, isAdmin ], actualizarCurso);
-cursosrouter.delete("/curso_id", [ isAuth, isAdmin ], eliminarCurso);
+cursosrouter.put("/:curso_id", [ isAuth, isAdmin ], actualizarCurso);
+cursosrouter.delete("/:curso_id", [ isAuth, isAdmin ], eliminarCurso);
 
 export default cursosrouter;
