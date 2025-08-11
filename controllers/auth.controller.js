@@ -1,8 +1,10 @@
 import jwt from 'jsonwebtoken' // para generar el token
 import bcrypt from 'bcrypt'
 import { loginUser, register, updatePassword} from '../models/auth.js' // importar el modelo de autenticación
+import {getRoleIdByName} from '../utils/auth.utils.js' // importar las utilidades de autenticación
 // import { Resend } from 'resend'
 import { v4 as uuidv4 } from 'uuid';
+import { validateRegister, validateLogin, validateSetPassword } from '../schemas/auth.schema.js';
 
 export const login = async (req, res) => {
 
@@ -62,7 +64,7 @@ export const login = async (req, res) => {
 
     delete data.password_hash // eliminar la contraseña del objeto de datos
 
-    res.json({
+    res.status(200).json({
         success: true,
         message: 'Usuario autenticado correctamente',
         data: data,
@@ -76,25 +78,34 @@ export const login = async (req, res) => {
 
 export const createUser = async (req, res) => {
 
-    const { name, email, phone, password, role } = req.body
+    // const { name, email, phone, password, role } = req.body
+    const data = req.body;
+
+    const { success, error} = validateRegister(data)
+
+    if (!success) {
+        res.status(400).json(error)
+    }
+
+    const rolId = await getRoleIdByName(data.role)
 
     const id = uuidv4()
 
     //generar una clave
     //TODO: generar una clave aleatoria
-    const password_hash = await bcrypt.hash( password, Number( process.env.SALT ))
+    const password_hash = await bcrypt.hash( data.password, Number( process.env.SALT ))
 
     try {
-        const result = await register([id, name, email, phone, password_hash, role])
+        const result = await register([id, data.name, data.email, data.phone, password_hash, rolId])
 
-        res.json({
+        res.status(201).json({
             success: true,
             message: 'Usuario creado correctamente',
             data: {
-                id,
-                name,
-                email,
-                phone
+                id: data.id,
+                name: data.name,
+                email: data.email,
+                phone: data.phone
             }
         })
     } catch (error) {
@@ -146,7 +157,7 @@ export const setPassword = async (req, res) => {
         await updatePassword(id, passwordHash)
 
 
-        res.json({
+        res.status(200).json({
             success: true,
             message: 'Contraseña actualizada correctamente'
         })
