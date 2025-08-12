@@ -1,6 +1,6 @@
 // import { validateUsuario } from '../schemas/movie.schema.js'
 import { getAllUsuarios } from '../models/usuarios.model.js'
-import { v4 as uuidv4 } from 'uuid';
+
 
 export const getAll = async (req, res) => {
 

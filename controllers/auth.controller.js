@@ -10,7 +10,7 @@ export const login = async (req, res) => {
 
     const dataValidated = req.body;
 
-    console.log(dataValidated);
+    
 
     const { success, error} = validateLogin(dataValidated)
 
@@ -21,7 +21,7 @@ export const login = async (req, res) => {
 
     const data = await loginUser(dataValidated.user)
 
-    console.log(data)
+    
 
     // validar que la contraseña sea correcta
     if (!await bcrypt.compare(dataValidated.password, data.password_hash)) {
@@ -64,7 +64,7 @@ export const login = async (req, res) => {
 
     }
 
-    console.log(payload)
+    
 
     const token = jwt.sign(payload, process.env.SECRET_JWT_SEED, {
         algorithm: 'HS256', // Sha2
@@ -136,7 +136,7 @@ export const setPassword = async (req, res) => {
 
     const data = req.body
 
-    console.log(data)
+    
     
     const { success, error} = validateSetPassword(data)
 
