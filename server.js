@@ -71,4 +71,5 @@ app.use((req, res) => {
 
 app.listen( port, () => {
     console.log( `Server is running on port http://localhost:${ port }` );
+    console.log( `Swagger API documentation available at: http://localhost:${ port }/api-docs` );
 });

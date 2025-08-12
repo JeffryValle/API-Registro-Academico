@@ -6,9 +6,9 @@ const options = {
         info: {
             title: 'API - Registro Academico ',
             version: '1.0.0',
-            description: 'API para el manejo de registros académicos',
+            description: 'API RESTful desarrollada utilizando Node.js y Express para gestionar estudiantes, cursos, matrículas y sistema de calificaciones, con autenticación por roles (admin/estudiante/profesor), validaciones y protección de rutas.',
             contact: {
-                name: 'Pedro Plasencia'
+                name: 'Fernando Castro'
             },
             servers: [
                 {
