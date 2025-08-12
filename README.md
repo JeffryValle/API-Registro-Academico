@@ -7,7 +7,7 @@ npm install
 ```
 Esto iniciara e instalara todas las dependecias necesarias. 
 
-##Instrucciones para iniciar
+## Instrucciones para iniciar
 
 ### 1. Requisitos
 
@@ -29,14 +29,76 @@ Esto iniciará un contenedor MySQL con:
 
 ## 🧱 Tablas creadas
 
-###roles
+### Roles
 | Campo         | Tipo         | Descripción                                |
 | ------------- | ------------ | ------------------------------------------ |
 | `rol_id`      | INT          | Identificador único (PK, auto incremental) |
 | `nombre`      | VARCHAR(50)  | Nombre del rol                             |
 | `descripcion` | VARCHAR(150) | Descripción del rol                        |
 
+### Usuarios
+| Campo             | Tipo         | Descripción                                                     |
+| ----------------- | ------------ | --------------------------------------------------------------- |
+| `cuenta_id`       | BINARY(16)   | UUID binario como PK                                            |
+| `nombre`          | VARCHAR(200) | Nombre completo del usuario                                     |
+| `correo`          | VARCHAR(150) | Correo electrónico (único)                                      |
+| `telefono`        | VARCHAR(12)  | Número de teléfono                                              |
+| `password_hash`   | VARCHAR(255) | Contraseña almacenada en hash (bcrypt)                          |
+| `cambio_password` | BOOLEAN      | Indica si el usuario debe cambiar contraseña (por defecto true) |
+| `fecha_creado`    | TIMESTAMP    | Fecha de creación del usuario                                   |
+| `rol_id`          | INT          | FK a `roles.rol_id`                                             |
+
+### Cursos
+| Campo      | Tipo         | Descripción                          |
+| ---------- | ------------ | ------------------------------------ |
+| `curso_id` | BINARY(16)   | UUID binario como PK                 |
+| `nombre`   | VARCHAR(255) | Nombre del curso (único)             |
+| `cupos`    | INT          | Cantidad máxima de cupos disponibles |
+
+### periodo_academico
+| Campo        | Tipo        | Descripción                                |
+| ------------ | ----------- | ------------------------------------------ |
+| `periodo_id` | INT         | Identificador único (PK, auto incremental) |
+| `nombre`     | VARCHAR(15) | Nombre del periodo académico               |
+
+### sub_periodo
+| Campo           | Tipo        | Descripción                                |
+| --------------- | ----------- | ------------------------------------------ |
+| `subperiodo_id` | INT         | Identificador único (PK, auto incremental) |
+| `nombre`        | VARCHAR(15) | Nombre del subperiodo                      |
+
+### matriculas
+| Campo          | Tipo                                    | Descripción                                    |
+| -------------- | --------------------------------------- | ---------------------------------------------- |
+| `matricula_id` | BINARY(16)                              | UUID binario como PK                           |
+| `cuenta_id`    | BINARY(16)                              | FK a `usuarios.cuenta_id`                      |
+| `curso_id`     | BINARY(16)                              | FK a `cursos.curso_id`                         |
+| `periodo_id`   | INT                                     | FK a `periodo_academico.periodo_id`            |
+| `resultado`    | VARCHAR(12)                             | Resultado de la matrícula (aprobado/reprobado) |
+| `fecha_creado` | TIMESTAMP                               | Fecha de creación de la matrícula              |
+| `fecha_final`  | DATETIME                                | Fecha final de la matrícula                    |
+| **UNIQUE**     | (`cuenta_id`, `curso_id`, `periodo_id`) | Evita duplicados en la misma matrícula         |
+
+### calificaciones
+| Campo             | Tipo                              | Descripción                                  |
+| ----------------- | --------------------------------- | -------------------------------------------- |
+| `calificacion_id` | INT                               | Identificador único (PK, auto incremental)   |
+| `matricula_id`    | BINARY(16)                        | FK a `matriculas.matricula_id`               |
+| `nota`            | DECIMAL(5,2)                      | Nota obtenida                                |
+| `fecha_registro`  | DATETIME                          | Fecha en que se registró la calificación     |
+| `subperiodo_id`   | INT                               | FK a `sub_periodo.subperiodo_id`             |
+| **UNIQUE**        | (`matricula_id`, `subperiodo_id`) | Evita duplicados de nota en mismo subperiodo |
+
+
 ## Arrancar la aplicacion
 ```
 npm run dev 
 ```
+
+## ¿Como acceder a la documentación? 
+-  Asegúrate de tener el servidor en ejecución
+- Abre tu navegador web y accede a la siguiente URL:
+```
+http://localhost:PUERTO/api-docs
+```
+*PUERTO se configura como una de las variables de entorno. 
