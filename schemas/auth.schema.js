@@ -1,8 +1,8 @@
 import zod from 'zod';
 
 const loginSchema = zod.object({
-  email: zod.email(),
-  password: zod.string().min(8).max(255)
+  user: zod.email(),
+  password: zod.string().min(4, { message: "La contraseña debe tener al menos 4 caracteres" }).max(255)
 });
 
 export const validateLogin = (data) => {
@@ -22,17 +22,12 @@ export const validateRegister = (data) => {
 }
 
 const setPasswordSchema = zod.object({
-    "old_password": zod.string().min(8).max(255),
-    "new_password": zod.string().min(8).max(255),
-    "confirm_password": zod.string().min(8).max(255).refine((val, ctx) => {
-        if (val !== ctx.parent.new_password) {
-            ctx.addIssue({
-                code: zod.ZodIssueCode.custom,
-                message: "Las contraseñas no coinciden"
-            });
-        }
-        return true;
-    })
+    "old_password": zod.string().min(6).max(255),
+    "new_password": zod.string().min(6).max(255),
+    "confirm_password": zod.string().min(6).max(255).refine((data) => data.new_password === data.confirm_password, {
+  message: "Las contraseñas nueva y de confirmación no coinciden",
+  path: ["confirm_password"], // el error se marca en confirm_password
+})
 });
 
 export const validateSetPassword = (data) => {

@@ -8,14 +8,23 @@ import { validateRegister, validateLogin, validateSetPassword } from '../schemas
 
 export const login = async (req, res) => {
 
-    const { user, password } = req.body
+    const dataValidated = req.body;
 
-    const data = await loginUser(user)
+    console.log(dataValidated);
+
+    const { success, error} = validateLogin(dataValidated)
+
+    if (!success) {
+        res.status(400).json(error)
+        return
+    }
+
+    const data = await loginUser(dataValidated.user)
 
     console.log(data)
 
     // validar que la contraseña sea correcta
-    if (!await bcrypt.compare(password, data.password_hash)) {
+    if (!await bcrypt.compare(dataValidated.password, data.password_hash)) {
         res.status(401).json({
             success: false,
             message: 'Usuario o contraseña incorrectos'
@@ -85,6 +94,7 @@ export const createUser = async (req, res) => {
 
     if (!success) {
         res.status(400).json(error)
+        return
     }
 
     const rolId = await getRoleIdByName(data.role)
@@ -123,17 +133,22 @@ export const setPassword = async (req, res) => {
 
     const { authorization } = req.headers
     const token = authorization.split(' ')[1]
-    const
-        {
-            old_password,
-            new_password,
-            confirm_password
-        } = req.body
+
+    const data = req.body
+
+    console.log(data)
+    
+    const { success, error} = validateSetPassword(data)
+
+    if (!success) {
+        res.status(400).json(error)
+        return
+    }
 
     try {
         const { id, password } = jwt.verify(token, process.env.SECRET_JWT_SEED)
 
-        if (!await bcrypt.compare(old_password, password)) {
+        if (!await bcrypt.compare(data.old_password, password)) {
             res.status(401).json({
                 success: false,
                 message: 'La contraseña anterior no es correcta',
@@ -143,7 +158,7 @@ export const setPassword = async (req, res) => {
         }
 
         // validar que las contraseñas nuevas coincidan
-        if (new_password !== confirm_password) {
+        if (data.new_password !== data.confirm_password) {
             res.status(400).json({
                 success: false,
                 message: 'Las contraseñas nueva y de confirmación no coinciden',
@@ -152,7 +167,7 @@ export const setPassword = async (req, res) => {
             return
         }
 
-        const passwordHash = await bcrypt.hash(new_password, 10)
+        const passwordHash = await bcrypt.hash(data.new_password, 10)
 
         await updatePassword(id, passwordHash)
 
