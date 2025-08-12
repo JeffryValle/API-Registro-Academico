@@ -13,42 +13,90 @@ export default authRoutes
 
 /**
  * @swagger
- * tags:
- *   name: Autenticación
- *   description: Endpoints para manejo de usuarios y autenticación
+ * components:
+ *   schemas:
+ *     Login:
+ *       type: object
+ *       required:
+ *         - user
+ *         - password
+ *       properties:
+ *         user:
+ *           type: string
+ *           format: email
+ *           example: usuario@correo.com
+ *         password:
+ *           type: string
+ *           minLength: 4
+ *           maxLength: 255
+ *           example: "1234"
+ * 
+ *     Register:
+ *       type: object
+ *       required:
+ *         - name
+ *         - email
+ *         - phone
+ *         - password
+ *         - role
+ *       properties:
+ *         name:
+ *           type: string
+ *           example: "Juan Pérez"
+ *         email:
+ *           type: string
+ *           format: email
+ *           example: "juan@correo.com"
+ *         phone:
+ *           type: string
+ *           example: "98765432"
+ *         password:
+ *           type: string
+ *           minLength: 8
+ *           maxLength: 100
+ *           example: "claveSegura123"
+ *         role:
+ *           type: string
+ *           enum: [admin, estudiante, profesor]
+ *           example: "estudiante"
+ * 
+ *     SetPassword:
+ *       type: object
+ *       required:
+ *         - old_password
+ *         - new_password
+ *         - confirm_password
+ *       properties:
+ *         old_password:
+ *           type: string
+ *           minLength: 6
+ *           maxLength: 255
+ *           example: "claveAnterior123"
+ *         new_password:
+ *           type: string
+ *           minLength: 6
+ *           maxLength: 255
+ *           example: "claveNueva456"
+ *         confirm_password:
+ *           type: string
+ *           example: "claveNueva456"
  */
 
 /**
  * @swagger
  * /auth/login:
  *   post:
- *     summary: Inicia sesión en el sistema
- *     tags: [Autenticación]
+ *     summary: Iniciar sesión
+ *     tags: [Auth]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               user:
- *                 type: string
- *                 format: email
- *                 example: usuario@correo.com
- *               password:
- *                 type: string
- *                 example: "12345678"
+ *             $ref: '#/components/schemas/Login'
  *     responses:
  *       200:
  *         description: Inicio de sesión exitoso
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 token:
- *                   type: string
- *                   example: "eyJhbGciOiJIUzI1NiIsInR5cCI..."
  *       400:
  *         description: Datos inválidos
  *       401:
@@ -59,68 +107,39 @@ export default authRoutes
  * @swagger
  * /auth/register:
  *   post:
- *     summary: Registra un nuevo usuario
- *     tags: [Autenticación]
+ *     summary: Registrar un nuevo usuario
+ *     tags: [Auth]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *                 example: Juan Pérez
- *               email:
- *                 type: string
- *                 format: email
- *                 example: usuario@correo.com
- *               phone:
- *                 type: string
- *                 example: "98765432"
- *               password:
- *                 type: string
- *                 example: "contraseñaSegura123"
- *               role:
- *                 type: string
- *                 enum: [admin, estudiante, profesor]
- *                 example: estudiante
+ *             $ref: '#/components/schemas/Register'
  *     responses:
  *       201:
- *         description: Usuario registrado exitosamente
+ *         description: Usuario registrado con éxito
  *       400:
- *         description: Datos inválidos o email ya registrado
+ *         description: Datos inválidos
+ *      
  */
 
 /**
  * @swagger
  * /auth/set-password:
  *   patch:
- *     summary: Cambia la contraseña de un usuario
- *     tags: [Autenticación]
- *     security:
- *       - bearerAuth: []
+ *     summary: Cambiar la contraseña de un usuario
+ *     tags: [Auth]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               old_password:
- *                 type: string
- *                 example: "miAntiguaClave"
- *               new_password:
- *                 type: string
- *                 example: "miNuevaClave123"
- *               confirm_password:
- *                 type: string
- *                 example: "miNuevaClave123"
+ *             $ref: '#/components/schemas/SetPassword'
  *     responses:
  *       200:
- *         description: Contraseña cambiada exitosamente
+ *         description: Contraseña actualizada correctamente
  *       400:
- *         description: Datos inválidos o contraseñas no coinciden
+ *         description: Datos inválidos
  *       401:
- *         description: Token no válido o expirado
+ *         description: No autorizado
  */
