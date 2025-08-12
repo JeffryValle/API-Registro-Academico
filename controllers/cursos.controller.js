@@ -8,6 +8,10 @@ import {
     deleteCurso
 }   from '../models/cursos.model.js';
 
+import { cursoSchema,
+    cursoUpdateSchema
+ } from "../schemas/curso.schema.js";
+
 export const listCursos = async (req, res) => {
 
     try{
@@ -56,38 +60,15 @@ export const crearCurso = async (req, res) => {
 
     try{
 
-        const { nombre, cupos }= req.body; 
-
-
-        // Validacion de datos
-        if(!nombre || !cupos){
-            return res.status(400).json({
-                success: false,
-                message: "Todos los datos son requeridos"
-            });
+            const parsed = cursoSchema.safeParse(req.body);
+        if (!parsed.success) {
+        return res.status(400).json({
+            success: false,
+            errors: parsed.error.errors.map(err => err.message),
+        });
         }
 
-        if (nombre.length < 3 || nombre.length > 50) {
-            return res.status(400).json({
-                success: false,
-                message: "El nombre del curso debe tener entre 3 y 50 caracteres"
-            });
-        }
-
-        if (nombre.trim().length < 3) {
-            return res.status(400).json({
-                success: false,
-                message: "El nombre del curso no puede ser solo espacios en blanco"
-            });
-        }
-
-        if (cupos === undefined || cupos === null || cupos === '' || isNaN(cupos) || cupos < 1 || cupos > 100) {
-            return res.status(400).json({
-                success: false,
-                message: "Los cupos deben estar entre 1 y 100",
-                error: error.message
-            });
-        }
+        const { nombre, cupos } = parsed.data;
 
 
         // Validar unicidad
@@ -95,8 +76,7 @@ export const crearCurso = async (req, res) => {
         if(existe.length > 0){
             return res.status(400).json({
                 success: false,
-                message: "El curso ya existe",
-                error: error.messageerror
+                message: "El curso ya existe"
             });
         }
 
@@ -123,36 +103,7 @@ export const actualizarCurso = async (req, res) => {
     try{
 
         const { curso_id } = req.params;
-        const { nombre, cupos }= req.body;
-
-        // Validacion de datos
-        if(!nombre || !cupos){
-            return res.status(400).json({
-                success: false,
-                message: "Todos los datos son requeridos",
-            });
-        }
-
-        if (nombre.length < 3 || nombre.length > 50) {
-            return res.status(400).json({
-                success: false,
-                message: "El nombre del curso debe tener entre 3 y 50 caracteres"
-            });
-        }
-
-        if (nombre.trim().length < 3) {
-            return res.status(400).json({
-                success: false,
-                message: "El nombre del curso no puede ser solo espacios en blanco"
-            });
-        }
-
-        if (cupos === undefined || cupos === null || cupos === '' || isNaN(cupos) || cupos < 1 || cupos > 100) {
-            return res.status(400).json({
-                success: false,
-                message: "Los cupos deben estar entre 1 y 100",
-            });
-        }
+        
 
         // Verificar si el curso existe
         const cursoExistente = await getCursoByID(curso_id);
@@ -163,25 +114,34 @@ export const actualizarCurso = async (req, res) => {
             });
         }    
 
+         const parsed = cursoUpdateSchema.safeParse(req.body);
+    if (!parsed.success) {
+      return res.status(400).json({
+        success: false,
+        errors: parsed.error.errors.map(err => err.message),
+      });
+    }
 
-        // Validar unicidad
-        if (nombre !== cursoExistente.nombre) {
-            const existeNombre = await findByNombre(nombre);
-            if (existeNombre.length > 0) {
-                return res.status(400).json({
-                    success: false,
-                    message: "El curso ya existe",
-                });
-            }
-        } 
-        
+    const { nombre, cupos } = parsed.data;
 
-        const result = await updateCurso(curso_id, { nombre, cupos });
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ error: "Curso no encontrado" });
-        }
+    // validar que Nombre sea único
+    if (nombre) {
+      const existe = await findByNombre(nombre);
+      if (existe.length > 0 && existe[0].curso_id !== curso_id) {
+        return res.status(400).json({
+          success: false,
+          message: "El nombre del curso ya existe",
+        });
+      }
+    }
 
-        res.json({ message: "Curso actualizado correctamente" });
+    // Actualizar curso
+    await updateCurso(id, { nombre, cupos });
+    res.status(200).json({
+      success: true,
+      message: "Curso actualizado exitosamente",
+    });
+
 
     }
 
