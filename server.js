@@ -6,12 +6,38 @@ import cursosrouter from './routes/cursos.routes.js';
 import usuariosRouter from './routes/usuarios.routes.js';
 import authRoutes from './routes/auth.routes.js' // rutas de autenticación
 import scoreRouter from './routes/score.routes.js';
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
 
 const app = express();
 
+// Seguridad con Helmet
+app.use(helmet());
+
+// Limitar el número de solicitudes
+const limiter = rateLimit({
+    windowMs: 1 * 60 * 1000, // 1 minuto
+    max: 10, // Limitar a 10 solicitudes por IP
+    message: {
+        success: false,
+        message: "Demasiadas solicitudes, espere un momento."
+    },
+});
+app.use(limiter);
+
 app.use(express.json());
 
-app.use(cors());
+app.use(cors({
+    // configuración de los origenes permitidos
+    origin: [
+        'http://localhost:3000',
+        'http://127.0.0.1:3000',
+    ],
+    // metodos permitidos
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    // encabezados permitidos
+    allowedHeaders: ['Content-Type', 'Authorization', 'Bearer', 'api-key']
+}));
 
 dotenv.config();
 
