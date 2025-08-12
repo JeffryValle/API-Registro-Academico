@@ -8,8 +8,13 @@ import authRoutes from './routes/auth.routes.js' // rutas de autenticación
 import scoreRouter from './routes/score.routes.js';
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
+import swaggerUI from "swagger-ui-express";
+import specs from './swagger/swagger.js';
 
 const app = express();
+
+// Swagger documentation
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
 
 // Seguridad con Helmet
 app.use(helmet());

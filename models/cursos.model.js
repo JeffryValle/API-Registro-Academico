@@ -17,7 +17,7 @@ export const createCurso = async (curso) => {
 
 export const findByNombre = async (nombre) => {
 
-    const query = 'SELECT nombre, cupos FROM cursos WHERE nombre = ? ;';
+    const query = 'SELECT BIN_TO_UUID(curso_id) AS curso_id, nombre, cupos FROM cursos WHERE nombre = ? ;';
 
     const [rows] = await pool.query(query, [nombre]);
 
