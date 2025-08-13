@@ -3,17 +3,17 @@ Gestión de Cursos y Matrículas por medio de una API-RESTful utilizando Node.js
 
 ## Tecnologias utilizadas 
 
--Node.js y Express: Servidor y rutas HTTP.
--MySQL2: Conexión y consultas a la base de datos MySQL.
--bcrypt: Encriptación de contraseñas.
--jsonwebtoken (JWT): Autenticación mediante tokens.
--uuid: Identificadores únicos (UUID) para usuarios, cursos y matrículas.
--dotenv: Variables de entorno.
--cors: Habilita CORS para el backend.
--helmet: Seguridad de cabeceras HTTP.
--express-rate-limit: Prevención de ataques de fuerza bruta.
--swagger-jsdoc y swagger-ui-express: Documentación de endpoints.
--zod: Validación de datos recibidos en requests.
+- Node.js y Express: Servidor y rutas HTTP.
+- MySQL2: Conexión y consultas a la base de datos MySQL.
+- bcrypt: Encriptación de contraseñas.
+- jsonwebtoken (JWT): Autenticación mediante tokens.
+- uuid: Identificadores únicos (UUID) para usuarios, cursos y matrículas.
+- dotenv: Variables de entorno.
+- cors: Habilita CORS para el backend.
+- helmet: Seguridad de cabeceras HTTP.
+- express-rate-limit: Prevención de ataques de fuerza bruta.
+- swagger-jsdoc y swagger-ui-express: Documentación de endpoints.
+- zod: Validación de datos recibidos en requests.
 
 ## 📦 Inicializar el proyecto de Node.js
 ```
