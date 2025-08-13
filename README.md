@@ -1,6 +1,20 @@
 # API-Registro-Academico
 Gestión de Cursos y Matrículas por medio de una API-RESTful utilizando Node.js y Express. Tambien configura un contenedor de **MySQL 8** usando Docker incluyendo un script de inicialización 
 
+## Tecnologias utilizadas 
+
+-Node.js y Express: Servidor y rutas HTTP.
+-MySQL2: Conexión y consultas a la base de datos MySQL.
+-bcrypt: Encriptación de contraseñas.
+-jsonwebtoken (JWT): Autenticación mediante tokens.
+-uuid: Identificadores únicos (UUID) para usuarios, cursos y matrículas.
+-dotenv: Variables de entorno.
+-cors: Habilita CORS para el backend.
+-helmet: Seguridad de cabeceras HTTP.
+-express-rate-limit: Prevención de ataques de fuerza bruta.
+-swagger-jsdoc y swagger-ui-express: Documentación de endpoints.
+-zod: Validación de datos recibidos en requests.
+
 ## 📦 Inicializar el proyecto de Node.js
 ```
 npm install
@@ -36,7 +50,7 @@ Esto iniciará un contenedor MySQL con:
 | MYSQL_ROOT_PASSWORD | `1234`      |
 | MYSQL_DATABASE      | `localhost` |
 | MYSQL_USER          | `user`      |
-| MYSQL_PASSWOR       | `1234`      |
+| MYSQL_PASSWORD      | `1234`      |
 
 ### Variables de entorno para la conexion 
 
@@ -44,7 +58,7 @@ Esto iniciará un contenedor MySQL con:
 | ----------------- | ---------------------------------- |
 | `PORT`            | `3000`                             |
 | `SECRET_JWT_SEED` |  |
-| `SALT`            | (vacío)                            |
+| `SALT`            | `(para bcrypt)`                    |
 | `DB_PORT`         | `3309`                             |
 | `DB_HOST`         | `localhost`                        |
 | `DB_USER`         | `root`                             |

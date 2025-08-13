@@ -1,20 +1,62 @@
+### Registro
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+    "name": " ",
+    "email": " ",
+    "phone": "98899889",
+    "password": "123456789",
+    "role": " "
+}
+
+### Registro
+POST http://localhost:3000/auth/login 
+Content-Type: application/json
+
+{
+    "user": " ",
+    "password": " "
+}
+
+###cambiodecontraseña
+PATCH http://localhost:3000/auth/set-password
+Content-Type: application/json
+Authorization: Bearer  
+
+{
+    "old_password": "123456789",
+    "new_password": "claveNueva456",
+    "confirm_password": "claveNueva456"
+}
+
+### Crear curso
+POST http://localhost:3000/cursos
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdWVudGFfaWQiOiJiNTRiNjdkMi1hY2E2LTRkMDctYjBmMC02ZjdlNDRmNDljZGQiLCJjb3JyZW8iOiJqZWZmcnkuYWxsZUB1bmFoLmhuIiwicm9sIjoiYWRtaW4iLCJpYXQiOjE3NTUxMDE0NTQsImV4cCI6MTc1NTE0NDY1NH0.dklNnazl3-HOkWct6E9Jm1_cvcSTRV5b2L7HShcf_A8
+
+{
+    "nombre": " ",
+    "cupos": 
+}
+
+
+
 ### Obtener matriculas
 GET http://localhost:3000/matriculas
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdWVudGFfaWQiOiJhMjcxOTBjZi02ODk5LTQwOTAtODQ3Ni1lODJmNWM4OGM2ZmQiLCJjb3JyZW8iOiJqZWZmcnkudmFsbGVAdW5haC5obiIsInJvbCI6ImRvY2VudGUiLCJpYXQiOjE3NTUxMDE5ODIsImV4cCI6MTc1NTE0NTE4Mn0.2qj9uZl9BLrynlaNz43iJ-IqeRBv8HmCdHeX7ssCk7A
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg3Yjk4ZjQwLTgzM2QtNDAwNS1hMmVkLWI5MDNkMTdmODhjZSIsInBhc3N3b3JkIjoiJDJiJDEwJEdoZk1NcmFuWnNUNWlZbDNiUWhtei5vdDVxZFYySjdFdlZUS1FTdlVvSEs4Vy5JUlJUOTdTIiwiaWF0IjoxNzU1MDk4MDk4LCJleHAiOjE3NTUxMDE2OTh9.Tbc444jb6Ow-P5RiuvIlmmzwrRUj0YMSoEMNcFqhzsA
 
 
 ### Ver estudiantes que pertenecen a un curso
 GET http://localhost:3000/matriculas/curso/494a5828-760c-11f0-8878-c2c469bd52ea
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdWVudGFfaWQiOiJhMjcxOTBjZi02ODk5LTQwOTAtODQ3Ni1lODJmNWM4OGM2ZmQiLCJjb3JyZW8iOiJqZWZmcnkudmFsbGVAdW5haC5obiIsInJvbCI6ImRvY2VudGUiLCJpYXQiOjE3NTUxMDE5ODIsImV4cCI6MTc1NTE0NTE4Mn0.2qj9uZl9BLrynlaNz43iJ-IqeRBv8HmCdHeX7ssCk7A
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg3Yjk4ZjQwLTgzM2QtNDAwNS1hMmVkLWI5MDNkMTdmODhjZSIsInBhc3N3b3JkIjoiJDJiJDEwJEdoZk1NcmFuWnNUNWlZbDNiUWhtei5vdDVxZFYySjdFdlZUS1FTdlVvSEs4Vy5JUlJUOTdTIiwiaWF0IjoxNzU1MDk4MDk4LCJleHAiOjE3NTUxMDE2OTh9.Tbc444jb6Ow-P5RiuvIlmmzwrRUj0YMSoEMNcFqhzsA
 
 
 
 ### Ver cursos en los que esta inscrito un estudiante/docente
 GET http://localhost:3000/matriculas/usuario/f44df6fd-760b-11f0-8878-c2c469bd52ea
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdWVudGFfaWQiOiJhMjcxOTBjZi02ODk5LTQwOTAtODQ3Ni1lODJmNWM4OGM2ZmQiLCJjb3JyZW8iOiJqZWZmcnkudmFsbGVAdW5haC5obiIsInJvbCI6ImRvY2VudGUiLCJpYXQiOjE3NTUxMDE5ODIsImV4cCI6MTc1NTE0NTE4Mn0.2qj9uZl9BLrynlaNz43iJ-IqeRBv8HmCdHeX7ssCk7A
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdWVudGFfaWQiOiI3Y2E4ZjlhZi1lN2NmLTQyMDQtYjgzNi00MTRkYjlkOWJmMTMiLCJjb3JyZW8iOiJqZWZmcnkuZXNwaW5hbEB1bmFoLmhuIiwicm9sIjoiYWRtaW4iLCJpYXQiOjE3NTQ4NDkzMzIsImV4cCI6MTc1NDg5MjUzMn0.Lb7ir9SC0pjMb2CAw4nPR-4yqC8pksms5Vg-vmXcjbQ
 
 
 
@@ -22,11 +64,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdWVudGFfaWQiOiJhM
 ### Crear matricula
 POST http://localhost:3000/matriculas
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdWVudGFfaWQiOiJhMjcxOTBjZi02ODk5LTQwOTAtODQ3Ni1lODJmNWM4OGM2ZmQiLCJjb3JyZW8iOiJqZWZmcnkudmFsbGVAdW5haC5obiIsInJvbCI6ImRvY2VudGUiLCJpYXQiOjE3NTUxMDE5ODIsImV4cCI6MTc1NTE0NTE4Mn0.2qj9uZl9BLrynlaNz43iJ-IqeRBv8HmCdHeX7ssCk7A
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJjNWE5ZjI3LWJkMTMtNDllMy05MjQxLTBlMzhlMjk0YTRhNyIsInBhc3N3b3JkIjoiJDJiJDEwJHZLQlcxV3B4UEtLZ214OFhmWVQ2T081c3p3dzNZeTJiTVpJajJ0aDlaU1I1T3pYVkNMMmthIiwiaWF0IjoxNzU1MDk4MDA0LCJleHAiOjE3NTUxMDE2MDR9.1aDF-TLZkPE3aSSGyTNX76UIANuJ18_4fL98joN1d6Y
 
 {
     "cuenta": "f44df6fd-760b-11f0-8878-c2c469bd52ea",
     "curso": "Redes de Computadoras",
     "periodo": 1
 }
+
 
