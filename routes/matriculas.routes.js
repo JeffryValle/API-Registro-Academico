@@ -95,49 +95,162 @@ export default matriculaRouter;
 
 /**
  * @swagger
- * /matriculas/curso/{id}:
+ * /matriculas/curso/{curso_id}:
  *   get:
- *     summary: Obtener estudiantes matriculados en un curso específico
- *     tags: [Matriculas]
+ *     summary: Obtener estudiantes de un curso
+ *     description: Devuelve todos los estudiantes inscritos en el curso indicado. Excluye al docente y otros roles no estudiantes.
+ *     tags:
+ *       - Matriculas
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: id
- *         required: true
+ *         name: curso_id
  *         schema:
  *           type: string
  *           format: uuid
- *         description: ID del curso
+ *         required: true
+ *         description: ID del curso en formato UUID
  *     responses:
  *       200:
- *         description: Lista de estudiantes en el curso
+ *         description: Lista de estudiantes obtenida correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   Estudiante:
+ *                     type: string
+ *                     format: uuid
+ *                     description: ID del estudiante
+ *                   nombre_estudiante:
+ *                     type: string
+ *                     description: Nombre del estudiante
+ *                   Curso_id:
+ *                     type: string
+ *                     format: uuid
+ *                     description: ID del curso
+ *                   Curso:
+ *                     type: string
+ *                     description: Nombre del curso
+ *             example:
+ *               - Estudiante: "a1b2c3d4-e5f6-7890-abcd-1234567890ef"
+ *                 nombre_estudiante: "Juan Pérez"
+ *                 Curso_id: "494a5828-760c-11f0-8878-c2c469bd52ea"
+ *                 Curso: "Matemáticas"
+ *               - Estudiante: "b2c3d4e5-f678-9012-abcd-0987654321ef"
+ *                 nombre_estudiante: "María López"
+ *                 Curso_id: "494a5828-760c-11f0-8878-c2c469bd52ea"
+ *                 Curso: "Matemáticas"
  *       404:
- *         description: No existen estudiantes en este curso
+ *         description: No se encontraron estudiantes inscritos en el curso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "No se encontraron estudiantes inscritos en el curso"
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Sucedió un error, verificar"
+ *                 error:
+ *                   type: string
  */
+
 
 /**
  * @swagger
- * /matriculas/usuario/{id}:
+ * /matriculas/usuario/{usuario_id}:
  *   get:
- *     summary: Obtener cursos en los que está inscrito un estudiante
- *     tags: [Matriculas]
+ *     summary: Obtener cursos de un usuario
+ *     description: Devuelve los cursos en los que está inscrito un estudiante o docente. Para docentes, devuelve separados por período académico.
+ *     tags:
+ *       - Matriculas
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: id
- *         required: true
+ *         name: usuario_id
  *         schema:
  *           type: string
  *           format: uuid
- *         description: ID de la cuenta del estudiante
+ *         required: true
+ *         description: ID del usuario en formato UUID
  *     responses:
  *       200:
- *         description: Lista de cursos del estudiante
+ *         description: Cursos obtenidos correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 Cuenta:
+ *                   type: string
+ *                   format: uuid
+ *                   description: ID del usuario
+ *                 Docente:
+ *                   type: string
+ *                   description: Nombre del usuario
+ *                 Rol:
+ *                   type: string
+ *                   description: Rol del usuario
+ *                 Periodo_1:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                   description: Cursos inscritos en el periodo 1
+ *                 Periodo_2:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                   description: Cursos inscritos en el periodo 2
+ *                 Periodo_3:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                   description: Cursos inscritos en el periodo 3
+ *             example:
+ *               Cuenta: "f44df6fd-760b-11f0-8878-c2c469bd52ea"
+ *               Docente: "Juan Pérez"
+ *               Rol: "Docente"
+ *               Periodo_1: ["Matemáticas", "Historia"]
+ *               Periodo_2: ["Física"]
+ *               Periodo_3: []
  *       404:
- *         description: No existen cursos para este estudiante
+ *         description: No se encontraron cursos para el usuario
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "El docente no se ha inscrito en ningún curso"
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Sucedió un error, verificar"
+ *                 error:
+ *                   type: string
  */
+
 
 /**
  * @swagger

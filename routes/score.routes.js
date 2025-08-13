@@ -31,7 +31,7 @@ export default scoreRouter;
  */
 /**
  * @swagger
- * /score/curso:
+ * /calificaciones/curso:
  *   get:
  *     summary: Obtener calificaciones de un curso en un periodo específico
  *     tags: [Score]
@@ -118,7 +118,7 @@ export default scoreRouter;
 
 /**
  * @swagger
- * /score/docente/cursos/{id}:
+ * /calificaciones/docente/cursos/{usuario_id}:
  *   get:
  *     summary: Obtener cursos de un docente por su ID
  *     tags: [Score]
@@ -126,7 +126,7 @@ export default scoreRouter;
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: usuario_id
  *         schema:
  *           type: string
  *           format: uuid
@@ -177,7 +177,7 @@ export default scoreRouter;
 
 /**
  * @swagger
- * /score/docente/estudiantes:
+ * /calificaciones/docente/estudiantes:
  *   get:
  *     summary: Obtener estudiantes inscritos en cursos de un docente (por nombre)
  *     tags: [Score]
@@ -226,7 +226,7 @@ export default scoreRouter;
 
 /**
  * @swagger
- * /score/docente/inscripcion:
+ * /calificaciones/docente/inscripcion:
  *   post:
  *     summary: Inscribir a un docente en un curso
  *     tags: [Score]
@@ -281,7 +281,7 @@ export default scoreRouter;
 
 /**
  * @swagger
- * /score:
+ * /calificaciones:
  *   post:
  *     summary: Insertar una calificación para un estudiante en un curso
  *     tags: [Score]
@@ -352,7 +352,7 @@ export default scoreRouter;
 
 /**
  * @swagger
- * /score:
+ * /calificaciones:
  *   patch:
  *     summary: Actualizar una calificación existente
  *     tags: [Score]

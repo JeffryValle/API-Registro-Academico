@@ -99,7 +99,17 @@ cursosrouter.get("/nombre", [ isAuth, isAdmin ], getCursosbyName);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Curso'
+ *             type: object
+ *             required:
+ *               - nombre
+ *               - cupos
+ *             properties:
+ *               nombre:
+ *                 type: string
+ *                 example: Matemáticas Avanzadas
+ *               cupos:
+ *                 type: integer
+ *                 example: 30
  *     responses:
  *       201:
  *         description: Curso creado correctamente

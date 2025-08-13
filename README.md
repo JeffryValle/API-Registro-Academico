@@ -27,6 +27,32 @@ Esto iniciará un contenedor MySQL con:
 - Base de datos inicial: `registro_academico`
 - Tablas configuradas correctamente
 
+## Configuracion de Variables de Entorno
+
+### Variables de entorno dentro del Docker
+
+| Parámetro           | Valor       |
+| -------------       | ----------- |
+| MYSQL_ROOT_PASSWORD | `1234`      |
+| MYSQL_DATABASE      | `localhost` |
+| MYSQL_USER          | `user`      |
+| MYSQL_PASSWOR       | `1234`      |
+
+### Variables de entorno para la conexion 
+
+| Parámetro         | Valor                              |
+| ----------------- | ---------------------------------- |
+| `PORT`            | `3000`                             |
+| `SECRET_JWT_SEED` |  |
+| `SALT`            | (vacío)                            |
+| `DB_PORT`         | `3309`                             |
+| `DB_HOST`         | `localhost`                        |
+| `DB_USER`         | `root`                             |
+| `DB_PASSWORD`     | `1234`                             |
+| `DB_NAME`         | `registro_academico`               |
+
+
+
 ## 🧱 Tablas creadas
 
 ### Roles
