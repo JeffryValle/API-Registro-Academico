@@ -4,10 +4,10 @@ import {
     cursosByStudent,
     existeCupo,
     getEstudiantesByCurso, 
-    getMatriculas, 
-    validateMatricula
+    getMatriculas
 } from "../models/matricula.model.js"
 import { v4 as uuidv4 } from 'uuid';
+import { validateMatricula } from "../schemas/matricula.schema.js";
 
 
 //? Ver todas las matriculas
@@ -87,7 +87,16 @@ export const getCursoByStudent = async ( req, res ) => {
 //? Matricularse en un curso
 export const crearMatricula = async (req, res) => {
 
-    const { cuenta, curso, periodo } = req.body;
+    const data = req.body;
+
+    const { success, error, data:safeData } = validateMatricula( data ); 
+
+    if ( !success ) {
+        res.status( 400 ).json({ message: error });
+        return 
+    }
+
+    const { cuenta, curso, periodo } = safeData;
  
     const id = uuidv4();
 

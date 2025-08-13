@@ -32,7 +32,6 @@ export const isAuth = (req, res, next) => {
 
         const { cuenta_id, correo, rol } = payload;
 
-        console.log(cuenta_id, correo, rol);
 
         if (!cuenta_id || !correo || !rol) {
 
