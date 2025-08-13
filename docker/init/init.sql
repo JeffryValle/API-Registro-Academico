@@ -62,3 +62,8 @@ CREATE TABLE calificaciones (
     FOREIGN KEY ( subperiodo_id ) REFERENCES sub_periodo( subperiodo_id ),
     FOREIGN KEY ( matricula_id ) REFERENCES matriculas( matricula_id )
 );
+
+INSERT IGNORE INTO roles (rol_id, nombre, descripcion) VALUES
+(1, 'admin', 'Administrador del sistema con acceso completo'),
+(2, 'estudiante', 'Usuario inscrito en cursos y con acceso limitado'),
+(3, 'profesor', 'Usuario encargado de impartir cursos');
